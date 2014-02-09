@@ -793,7 +793,7 @@ function makeComment(level, i, data){
     console.log(data);
     var id = "'comLevel"+level+"num"+i+"'"
     var com = "<div class='comment' id="+id+">" 
-        +"<div class='updown'><div class='up'></div><div class='down'></div></div>"
+        +"<div class='updown'><div class='up'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div class='down'></div></div>"
         +"<div class='comInfo'><a class='shrink' onclick='return hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a></div>"
         +decodeEntities(data.body_html)
         + "</div>"

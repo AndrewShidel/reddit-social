@@ -76,6 +76,13 @@ body {
     height: 17px;
 }
 
+.comScore{
+    width: 100%;
+    text-align: center;
+    display: block;
+    color: #AAA;
+}
+
 .comInfo{
     position: relative;
     top: -32px;

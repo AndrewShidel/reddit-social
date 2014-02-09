@@ -1,0 +1,83 @@
+<html>
+
+
+<head>
+<style>
+textarea{
+	width: 600;
+	height: 200;
+	font-size: 12pt;
+}
+#container{
+	width: 800px;
+	margin: 0 auto;
+	border-width: 0 1px;
+	background: #FFF;
+	padding: 20px;
+	border-radius: 10px;
+}
+body{
+	background: #AAA;
+}
+#submit{
+	position: relative;
+	left: 500px;
+	width: 100px;
+	height: 30px;
+	background-color: #F00;
+	border: 2px solid;
+	line-height: 10px;
+	text-align: center;
+}
+#subCon{
+	margin-top: 5px;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+}
+.text{
+	width: 400px;
+	padding: 5px;
+	font-size: 14pt;
+}
+</style>
+</head>
+
+
+<body>
+<div id="container">
+<h1>Create Your Site</h1>
+
+<p>Name of your site (Usualy your domain name with out the extention)</p>
+<input type="text" name="name" id="siteName" class="text" value="">
+
+<br/>
+
+<p>Site title</p>
+<input type="text" name="name" id="siteTitle" class="text" value="">
+
+<p>Describe your site.  500 charactors max.</p>
+<textarea rows="1" cols="1" name="public_description" class=""></textarea>
+
+<br/><br/>
+<input type="checkbox" name="over_18" id="over_18">
+<label for="over_18">Viewers must be over eighteen years old</label>
+<br/>
+<input type="checkbox" name="allow_top" id="allow_top" checked="checked">
+<label for="allow_top">Allow this subreddit to be shown in the default set</label>
+<br/>
+<input type="checkbox" name="show_media" id="show_media">
+<label for="show_media">Show thumbnail images of content</label>
+<br/>
+<input type="checkbox" name="exclude_banned_modqueue" id="exclude_banned_modqueue">
+<label for="exclude_banned_modqueue">Exclude posts by site-wide banned users from modqueue/unmoderated</label>
+<br/>
+<input type="checkbox" name="public_traffic" id="public_traffic">
+<label for="public_traffic">Make the traffic stats page available to everyone</label>
+<br/>
+<a><div id='submit'><span id="subCon">Submit</span></div></a>
+</div>
+</body>
+
+
+</html>

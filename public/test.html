@@ -12,6 +12,12 @@
 <input type='text' id='username' width=150/><input type='password' id='pass' width=150/>
 <input type='button' value='Create' onclick="login()"/>
 <br><br><br><br>
+
+<h2>Render Comments Test</h2>
+<input id="comUrl" placeholder="reddit.com/r/programming/comments/1xcpqx/wxwidgets_30_the_first_new_stable_wxwidgets/" type='text' width=150/><input type='button' value='Show Comments' onclick='renderComments()'/>
+
+<br><br><br><br>
+
 <h2>Create Sub Test</h2>
 <br>
 <div class="pretty-form" id="sr-form">
@@ -741,13 +747,52 @@ function createSub(){
 
 function login(){
 	var name = document.getElementById("username").value,
-	pass = document.getElementById("pass").value
+	pass = document.getElementById("pass").value	
+	
 	console.log( name + "  " + pass );
 	console.log("http://localhost:3000/?url=https://ssl.reddit.com/api/login&json={ api_type: 'json', passwd: '"+pass+"', rem: 'true', user: '"+name+"'}"); 
 	//console.log("http://localhost:3000/?url=https://ssl.reddit.com/api/login&json={test}");
-	$.get("http://localhost:3000/?type=login&url="+encodeURIComponent("https://ssl.reddit.com/api/login/"+name+"?user="+name+"&passwd="+pass), function( data ) {		
+	$.get("http://localhost:3000/post/?type=login&url="+encodeURIComponent("https://ssl.reddit.com/api/login/"+name+"?user="+name+"&passwd="+pass), function( data ) {		
 		alert( data );
 	});
+}
+
+function renderComments(){
+	var url = document.getElementById("comUrl").value;
+	if (url==null || url==undefined || url=="") url = document.getElementById("comUrl").getAttribute("placeholder");
+	console.log("URL: " + url);
+	url = url.substring(url.length-1)=="/"?url.substring(0,url.length-1):url;
+	document.body.innerHTML += "<div id='comments'></div>";
+	var com = document.getElementById("comments");
+	
+	$.get("http://localhost:3000/get/?url="+url + "/.json", function(data){
+		//com.innerHTML += "<p>" + data + "</p>";
+		
+		var obj = JSON.parse(data);
+		var comments = obj[1].data.children;
+		
+		make(com, comments, 0);
+		
+	});	
+}
+
+function make(com, comments,level){
+	for (var i = 0; i < comments.length; i++){
+		com.innerHTML += "<div class='comment' id='comLevel"+level+"num"+i+"'>" +decodeEntities(comments[i].data.body_html)+ "</div>"
+		try{
+			if (comments[i].data.replies.data.children.length>0){
+				make(document.getElementById("comLevel"+level+"num"+i), comments[i].data.replies.data.children, level+1);
+			}
+		}catch(e){}
+	}
+}
+
+function decodeEntities(s){
+    var str, temp= document.createElement('p');
+    temp.innerHTML= s;
+    str= temp.textContent || temp.innerText;
+    temp=null;
+    return str;
 }
 
 

@@ -761,6 +761,7 @@ function renderComments(){
 	var url = document.getElementById("comUrl").value;
 	if (url==null || url==undefined || url=="") url = document.getElementById("comUrl").getAttribute("placeholder");
 	console.log("URL: " + url);
+    url = url.replace("http://", "");
 	url = url.substring(url.length-1)=="/"?url.substring(0,url.length-1):url;
 	document.body.innerHTML += "<div id='comments'></div>";
 	var com = document.getElementById("comments");
@@ -778,7 +779,8 @@ function renderComments(){
 
 function make(com, comments,level){
 	for (var i = 0; i < comments.length; i++){
-		com.innerHTML += "<div class='comment' id='comLevel"+level+"num"+i+"'>" +decodeEntities(comments[i].data.body_html)+ "</div>"
+		if (comments[i].data.body_html!=undefined) com.innerHTML += "<div class='comment' id='comLevel"+level+"num"+i+"'>" +decodeEntities(comments[i].data.body_html)+ "</div>"
+        else continue;
 		try{
 			if (comments[i].data.replies.data.children.length>0){
 				make(document.getElementById("comLevel"+level+"num"+i), comments[i].data.replies.data.children, level+1);

@@ -1,0 +1,485 @@
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+html {
+    height: 100%;
+	padding: 15px;
+}
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td,iframe {
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+fieldset,img {
+    border: 0;
+}
+
+address,caption,cite,code,dfn,em,strong,th,var {
+    font-style: normal;
+    font-weight: normal;
+}
+
+ol,ul {
+    list-style: none;
+}
+
+caption,th {
+    text-align: left;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-size: 100%;
+}
+
+q:before,q:after {
+    content: '';
+}
+
+body {
+    font: normal x-small verdana,arial,helvetica,sans-serif;
+    background-color: white;
+    z-index: 1;
+    min-height: 100%;
+}
+
+textarea {
+    font: normal small verdana,arial,helvetica,sans-serif;
+	width: 500px;
+	height: 200px;
+}
+
+button,html input[type="button"],input[type="reset"],input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+button[disabled],html input[disabled] {
+    cursor: default;
+}
+
+input[type=hidden] {
+    position: absolute;
+}
+
+h1 {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 0;
+}
+
+h2 {
+    color: #369;
+    font-size: 13px;
+}
+
+h2 a {
+    text-decoration: none;
+}
+
+h2 a:visited {
+    color: #336699;
+}
+
+h2 a:hover {
+    text-decoration: underline;
+}
+
+h3 {
+    font-size: 110%;
+}
+
+a img {
+    border: 0 none;
+}
+
+a {
+    text-decoration: none;
+    color: #369;
+}
+
+.rounded {
+    border-radius: 7px;
+}
+
+.rounded .morelink {
+    border-top-right-radius: 6px;
+}
+
+div.autosize {
+    display: table;
+    width: 1px;
+}
+
+div.autosize>div {
+    display: table-cell;
+}
+
+input.txt {
+    background-color: #f7f7f7;
+    border: 1px solid #369;
+}
+
+input[type=checkbox],input[type=radio] {
+    margin-top: .4em;
+}
+
+label.disabled {
+    color: gray;
+}
+
+.wrong {
+    color: red;
+    font-weight: normal;
+}
+
+.attention {
+    font-weight: bold;
+    border: solid 1px #ff6600;
+    padding: 3px;
+    border-radius: 7px;
+}
+
+.subform input.text {
+    width: 25em;
+}
+
+.subform textarea.text {
+    width: 25em;
+}
+
+.subform label {
+    margin: 0 5px 0 5px;
+}
+
+.subform td {
+    padding: 0px 5px 5px 0;
+}
+
+.subform td.nopadding {
+    padding: 0px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.leftpad {
+    padding-left: 1em;
+}
+
+.nomargin {
+    margin: 0px;
+}
+
+.nopadding {
+    padding: 0px;
+}
+
+.fancybutton {
+    padding: 5px 10px;
+    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#d4e3f2),to(#adc9e6));
+    background: -moz-linear-gradient(top,#d4e3f2,#adc9e6);
+    background-color: #ADC9E6;
+    border: 1px solid #5E96CF;
+    border-radius: 7px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    color: #2E6399;
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+    -webkit-box-shadow: inset 0px 1px 0px rgba(255,255,255,0.8);
+    -moz-box-shadow: inset 0px 1px 0px rgba(255,255,255,0.8);
+    box-shadow: inset 0px 1px 0px rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.fancybutton:hover {
+    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#e4edf7),to(#d4e3f2));
+    background: -moz-linear-gradient(top,#e4edf7,#d4e3f2);
+    background-color: #D4E3F2;
+}
+
+.fancybutton:focus,.fancybutton:active {
+    background: -webkit-gradient(linear,0% 0%,0% 100%,to(#d4e3f2),from(#adc9e6));
+    background: -moz-linear-gradient(top,#adc9e6,#d4e3f2);
+    background-color: #D4E3F2;
+    -webkit-box-shadow: inset 0px -1px 0px rgba(255,255,255,0.7);
+    -moz-box-shadow: inset 0px -1px 0px rgba(255,255,255,0.7);
+    box-shadow: inset 0px -1px 0px rgba(255,255,255,0.7);
+}
+
+.fancybutton.disabled,.fancybutton.disabled:active {
+    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#e9edf1),to(#dce3ea));
+    background: -moz-linear-gradient(top,#e9edf1,#dce3ea);
+    background-color: #D4E3F2;
+    border-color: #999;
+    color: #999;
+}
+
+.hover a:hover {
+    text-decoration: underline;
+}
+
+.selected,.choice.primary {
+    font-weight: bold;
+}
+
+.flat-list {
+    list-style-type: none;
+    display: inline;
+}
+
+.flat-list li,.flat-list form {
+    display: inline;
+    white-space: nowrap;
+}
+
+.flat-list li a.gold {
+    color: #9a7d2e;
+    font-weight: bold;
+}
+
+.flat-list li.selected a {
+    color: orangered;
+}
+
+.link .flat-list {
+    display: block;
+    padding: 1px 0;
+}
+
+.link.compressed .flat-list {
+    display: inline-block;
+    padding: 0 0 1px 0;
+}
+
+ul.flat-vert {
+    text-align: left;
+}
+
+.flat-vert .separator {
+    margin: 0;
+}
+
+.flat-vert.title {
+    font-family: arial,verdana,helvetica,sans-serif;
+    color: #777;
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.separator {
+    color: gray;
+    margin: 0px .7ex 0px .7ex;
+    cursor: default;
+}
+
+.pref-lang {
+    font-weight: bold;
+}
+
+.pref {
+    font-weight: bold;
+}
+
+#jumpToContent {
+    position: absolute;
+    left: 135px;
+    top: 25px;
+    font-weight: bold;
+    margin-left: -1000px;
+}
+
+#jumpToContent:focus {
+    margin-left: 0!important;
+}
+
+#header {
+    border-bottom: 1px solid #5f99cf;
+    position: relative;
+    background-color: #cee3f8;
+    z-index: 99;
+}
+
+#header-img {
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+#header-img.default-header {
+    text-indent: -9999px;
+    background-image: url(sprite-reddit.hV9obzo72Pc.png);
+    background-position: 0px -313px;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 120px;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-bottom: 3px;
+}
+
+#header-top {
+    position: absolute;
+    right: 5px;
+}
+
+#header-bottom-left {
+    font-size: larger;
+}
+
+#header-bottom-right {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background-color: #EFF7FF;
+    padding: 4px;
+    line-height: 12px;
+    border-top-left-radius: 7px;
+}
+
+#mail {
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    text-indent: -9999px;
+    overflow: hidden;
+    width: 15px;
+    height: 10px;
+}
+
+#mail.havemail {
+    background-image: url(sprite-reddit.hV9obzo72Pc.png);
+    background-position: -105px -796px;
+    background-repeat: no-repeat;
+}
+
+#mail.nohavemail {
+    background-image: url(sprite-reddit.hV9obzo72Pc.png);
+    background-position: -29px -817px;
+    background-repeat: no-repeat;
+}
+
+#modmail {
+    position: relative;
+    top: -2px;
+    display: inline-block;
+    text-indent: -9999px;
+    overflow: hidden;
+    width: 16px;
+    height: 16px;
+    margin-bottom: -6px;
+}
+
+#modmail.havemail {
+    background-image: url(sprite-reddit.hV9obzo72Pc.png);
+    background-position: -88px -708px;
+    background-repeat: no-repeat;
+}
+
+#modmail.nohavemail {
+    background-image: url(sprite-reddit.hV9obzo72Pc.png);
+    background-position: 0px -730px;
+    background-repeat: no-repeat;
+}
+
+.user {
+    color: gray;
+}
+
+.user .userkarma {
+    cursor: help;
+    font-weight: bold;
+    border-bottom: 1px dotted gray;
+}
+
+.pagename {
+    font-weight: bold;
+    margin-right: 1ex;
+    font-variant: small-caps;
+    font-size: 1.2em;
+    vertical-align: bottom;
+}
+
+.pagename a {
+    color: black;
+}
+
+.newpagelink {
+    padding: 3px 5px;
+    background-color: #ff9;
+}
+
+.dropdown {
+    cursor: default;
+    display: inline;
+    position: relative;
+}
+
+.drop-choices.inuse {
+    display: block;
+}
+
+.drop-choices {
+    position: absolute;
+    left: 0px;
+    border: 1px solid gray;
+    z-index: 100;
+    background-color: white;
+    white-space: nowrap;
+    line-height: normal;
+    margin-top: 1px;
+    display: none;
+}
+
+.drop-choices a.choice {
+    cursor: pointer;
+    padding: 2px 3px 1px 3px;
+    display: block;
+}
+
+.drop-choices a.choice:hover {
+    background-color: #c7def7;
+}
+
+.drop-choices a.choice.selected {
+    display: none;
+}
+
+.dropdown.heavydrop .selected {
+    background: #ffffff none no-repeat scroll center right;
+    background-image: url(../droparrow.gif);
+    border: 1px solid gray;
+    padding: 2px;
+    padding-right: 23px;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+.dropdown.lightdrop .selected {
+    position: relative;
+    background: none no-repeat scroll center right;
+    background-image: url(../droparrowgray.gif);
+    padding-right: 21px;
+    text-decoration: underline;
+    color: gray;
+}
+
+.drop-choices.lightdrop {
+    margin-top: 2px;
+}
+
+.dropdown.tabdrop .selected {
+    position: relative;
+    background: #ffffff none no-repeat scroll center right;
+    background-image: url(../droparrowgray.gif)

@@ -1,0 +1,759 @@
+<html>
+
+<head>
+<script src="./jquery.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+
+<body>
+<h2>Login Test</h2>
+<br>
+<input type='text' id='username' width=150/><input type='password' id='pass' width=150/>
+<input type='button' value='Create' onclick="login()"/>
+<br><br><br><br>
+<h2>Create Sub Test</h2>
+<br>
+<div class="pretty-form" id="sr-form">
+    <div class="linefield "><span class="title">name</span>  <span class="gray">no spaces, e.g., slashdot</span>
+        <div class="linefield-content">
+            <input type="text" name="name" id="name" class="text" value=""><span class="error SUBREDDIT_EXISTS field-name" style="display:none"></span><span class="error BAD_SR_NAME field-name" style="display:none"></span>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">title</span>  <span class="gray">e.g., slashdot: news for nerds, stuff that matters</span>
+        <div class="linefield-content">
+            <input id="title" type="text" name="title" class="text"><span class="error NO_TEXT field-title" style="display:none"></span><span class="error TOO_LONG field-title" style="display:none"></span>
+        </div>
+    </div>
+    <div class="linefield usertext"><span class="title">description</span>  <span class="gray">publicly describe your subreddit for all to see. 500 characters max.</span>
+        <div class="linefield-content">
+            <div class="usertext">
+                <input type="hidden" name="thing_id" value="">
+                <div class="usertext-edit" style="">
+                    <div>
+                        <textarea rows="1" cols="1" name="public_description" class=""></textarea>
+                    </div>
+                    <div class="bottom-area"><span class="help-toggle toggle" style=""><a class="option active " href="#" tabindex="100" onclick="return toggle(this, helpon, helpoff)">formatting help</a><a class="option " href="#">hide help</a></span><a href="/wiki/reddiquette"
+                        class="reddiquette" target="_blank" tabindex="100">reddiquette</a><span class="error TOO_LONG field-public_description" style="display:none"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span>
+                        <span
+                        class="error NO_TEXT field-public_description" style="display:none"></span><span class="error TOO_OLD field-parent" style="display:none"></span><span class="error DELETED_COMMENT field-parent" style="display:none"></span><span class="error DELETED_LINK field-parent" style="display:none"></span>
+                            <span
+                            class="error USER_BLOCKED field-parent" style="display:none"></span>
+                                <div class="usertext-buttons">
+                                    <button type="submit" onclick="" class="save" style="display:none">save</button>
+                                    <button type="button" onclick="cancel_usertext(this)" class="cancel" style="display:none">cancel</button>
+                                </div>
+                    </div>
+                    <div class="markhelp" style="display:none">
+                        <p></p>
+                        <p>reddit uses a slightly-customized version of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> for formatting. See below for some basics, or check <a href="/wiki/commenting">the commenting wiki page</a> for
+                            more detailed help and solutions to common issues.</p>
+
+                        <p></p>
+                        
+                    </div>
+                </div>
+            </div>
+            <div id="public_description_conflict_box" style="display: none">
+                <div id="public_description_conflict_diff"></div>
+                <div class="usertext">
+                    <input type="hidden" name="thing_id" value="">
+                    <div class="usertext-edit" style="">
+                        <div>
+                            <textarea rows="1" cols="1" name="public_description_conflict_old" class=""></textarea>
+                        </div>
+                        <div class="bottom-area"><span class="help-toggle toggle" style=""><a class="option active " href="#" tabindex="100" onclick="return toggle(this, helpon, helpoff)">formatting help</a><a class="option " href="#">hide help</a></span><a href="/wiki/reddiquette"
+                            class="reddiquette" target="_blank" tabindex="100">reddiquette</a><span class="error TOO_LONG field-public_description_conflict_old" style="display:none"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span>
+                            <span
+                            class="error NO_TEXT field-public_description_conflict_old" style="display:none"></span><span class="error TOO_OLD field-parent" style="display:none"></span><span class="error DELETED_COMMENT field-parent" style="display:none"></span><span class="error DELETED_LINK field-parent" style="display:none"></span>
+                                <span
+                                class="error USER_BLOCKED field-parent" style="display:none"></span>
+                                    <div class="usertext-buttons">
+                                        <button type="submit" onclick="" class="save" style="display:none">save</button>
+                                        <button type="button" onclick="cancel_usertext(this)" class="cancel" style="display:none">cancel</button>
+                                    </div>
+                        </div>
+                        <div class="markhelp" style="display:none">
+                            <p></p>
+                            <p>reddit uses a slightly-customized version of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> for formatting. See below for some basics, or check <a href="/wiki/commenting">the commenting wiki page</a> for
+                                more detailed help and solutions to common issues.</p>
+
+                            <p></p>
+                            <table class="md">
+                                <tbody>
+                                    <tr style="background-color: #ffff99; text-align: center">
+                                        <td><em>you type:</em>
+                                        </td>
+                                        <td><em>you see:</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>*italics*</td>
+                                        <td><em>italics</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>**bold**</td>
+                                        <td><b>bold</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>[reddit!](http://reddit.com)</td>
+                                        <td><a href="http://reddit.com">reddit!</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>* item 1
+                                            <br>* item 2
+                                            <br>* item 3</td>
+                                        <td>
+                                            <ul>
+                                                <li>item 1</li>
+                                                <li>item 2</li>
+                                                <li>item 3</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&gt; quoted text</td>
+                                        <td>
+                                            <blockquote>quoted text</blockquote>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lines starting with four spaces
+                                            <br>are treated like code:
+                                            <br>
+                                            <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;</span>if 1 * 2 &lt; 3:
+                                            <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>print "hello, world!"
+                                            <br>
+                                        </td>
+                                        <td>Lines starting with four spaces
+                                            <br>are treated like code:
+                                            <br><pre>if 1 * 2 &lt; 3:<br>&nbsp;&nbsp;&nbsp;&nbsp;print "hello, world!"</pre>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>~~strikethrough~~</td>
+                                        <td><strike>strikethrough</strike>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>super^script</td>
+                                        <td>super<sup>script</sup>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><span class="error CONFLICT field-public_description" style="display:none"></span>
+        </div>
+    </div>
+    <div class="linefield usertext"><span class="title">sidebar</span>  <span class="gray">shown in the sidebar of your subreddit. 5120 characters max.</span>
+        <div class="linefield-content">
+            <div class="usertext">
+                <input type="hidden" name="thing_id" value="">
+                <div class="usertext-edit" style="">
+                    <div>
+                        <textarea rows="1" cols="1" name="description" class=""></textarea>
+                    </div>
+                    <div class="bottom-area"><span class="help-toggle toggle" style=""><a class="option" href="#" tabindex="100" onclick="return toggle(this, helpon, helpoff)">formatting help</a><a class="option  active" href="#">hide help</a></span><a href="/wiki/reddiquette"
+                        class="reddiquette" target="_blank" tabindex="100">reddiquette</a><span class="error TOO_LONG field-description" style="display:none"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span><span class="error NO_TEXT field-description"
+                        style="display:none"></span><span class="error TOO_OLD field-parent" style="display:none"></span><span class="error DELETED_COMMENT field-parent" style="display:none"></span><span class="error DELETED_LINK field-parent" style="display:none"></span>
+                        <span
+                        class="error USER_BLOCKED field-parent" style="display:none"></span>
+                            <div class="usertext-buttons">
+                                <button type="submit" onclick="" class="save" style="display:none">save</button>
+                                <button type="button" onclick="cancel_usertext(this)" class="cancel" style="display:none">cancel</button>
+                            </div>
+                    </div>
+                    <div class="markhelp" style="">
+                        <p></p>
+                        <p>reddit uses a slightly-customized version of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> for formatting. See below for some basics, or check <a href="/wiki/commenting">the commenting wiki page</a> for
+                            more detailed help and solutions to common issues.</p>
+
+                        <p></p>
+                       
+                    </div>
+                </div>
+            </div>
+            <div id="description_conflict_box" style="display: none">
+                <div id="description_conflict_diff"></div>
+                <div class="usertext">
+                    <input type="hidden" name="thing_id" value="">
+                    <div class="usertext-edit" style="">
+                        <div>
+                            <textarea rows="1" cols="1" name="description_conflict_old" class=""></textarea>
+                        </div>
+                        <div class="bottom-area"><span class="help-toggle toggle" style=""><a class="option active " href="#" tabindex="100" onclick="return toggle(this, helpon, helpoff)">formatting help</a><a class="option " href="#">hide help</a></span><a href="/wiki/reddiquette"
+                            class="reddiquette" target="_blank" tabindex="100">reddiquette</a><span class="error TOO_LONG field-description_conflict_old" style="display:none"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span>
+                            <span
+                            class="error NO_TEXT field-description_conflict_old" style="display:none"></span><span class="error TOO_OLD field-parent" style="display:none"></span><span class="error DELETED_COMMENT field-parent" style="display:none"></span><span class="error DELETED_LINK field-parent" style="display:none"></span>
+                                <span
+                                class="error USER_BLOCKED field-parent" style="display:none"></span>
+                                    <div class="usertext-buttons">
+                                        <button type="submit" onclick="" class="save" style="display:none">save</button>
+                                        <button type="button" onclick="cancel_usertext(this)" class="cancel" style="display:none">cancel</button>
+                                    </div>
+                        </div>
+                        <div class="markhelp" style="display:none">
+                            <p></p>
+                            <p>reddit uses a slightly-customized version of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> for formatting. See below for some basics, or check <a href="/wiki/commenting">the commenting wiki page</a> for
+                                more detailed help and solutions to common issues.</p>
+
+                            <p></p>
+                            <table class="md">
+                                <tbody>
+                                    <tr style="background-color: #ffff99; text-align: center">
+                                        <td><em>you type:</em>
+                                        </td>
+                                        <td><em>you see:</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>*italics*</td>
+                                        <td><em>italics</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>**bold**</td>
+                                        <td><b>bold</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>[reddit!](http://reddit.com)</td>
+                                        <td><a href="http://reddit.com">reddit!</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>* item 1
+                                            <br>* item 2
+                                            <br>* item 3</td>
+                                        <td>
+                                            <ul>
+                                                <li>item 1</li>
+                                                <li>item 2</li>
+                                                <li>item 3</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&gt; quoted text</td>
+                                        <td>
+                                            <blockquote>quoted text</blockquote>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lines starting with four spaces
+                                            <br>are treated like code:
+                                            <br>
+                                            <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;</span>if 1 * 2 &lt; 3:
+                                            <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>print "hello, world!"
+                                            <br>
+                                        </td>
+                                        <td>Lines starting with four spaces
+                                            <br>are treated like code:
+                                            <br><pre>if 1 * 2 &lt; 3:<br>&nbsp;&nbsp;&nbsp;&nbsp;print "hello, world!"</pre>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>~~strikethrough~~</td>
+                                        <td><strike>strikethrough</strike>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>super^script</td>
+                                        <td>super<sup>script</sup>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><span class="error CONFLICT field-description" style="display:none"></span>
+        </div>
+    </div>
+    <div class="linefield usertext"><span class="title">submission text</span>  <span class="gray">text to show on submission page. 1024 characters max.</span>
+        <div class="linefield-content">
+            <div class="usertext">
+                <input type="hidden" name="thing_id" value="">
+                <div class="usertext-edit" style="">
+                    <div>
+                        <textarea rows="1" cols="1" name="submit_text" class=""></textarea>
+                    </div>
+                    <div class="bottom-area"><span class="help-toggle toggle" style=""><a class="option active " href="#" tabindex="100" onclick="return toggle(this, helpon, helpoff)">formatting help</a><a class="option " href="#">hide help</a></span><a href="/wiki/reddiquette"
+                        class="reddiquette" target="_blank" tabindex="100">reddiquette</a><span class="error TOO_LONG field-submit_text" style="display:none"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span><span class="error NO_TEXT field-submit_text"
+                        style="display:none"></span><span class="error TOO_OLD field-parent" style="display:none"></span><span class="error DELETED_COMMENT field-parent" style="display:none"></span><span class="error DELETED_LINK field-parent" style="display:none"></span>
+                        <span
+                        class="error USER_BLOCKED field-parent" style="display:none"></span>
+                            <div class="usertext-buttons">
+                                <button type="submit" onclick="" class="save" style="display:none">save</button>
+                                <button type="button" onclick="cancel_usertext(this)" class="cancel" style="display:none">cancel</button>
+                            </div>
+                    </div>
+                    <div class="markhelp" style="display:none">
+                        <p></p>
+                        <p>reddit uses a slightly-customized version of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> for formatting. See below for some basics, or check <a href="/wiki/commenting">the commenting wiki page</a> for
+                            more detailed help and solutions to common issues.</p>
+
+                        <p></p>
+                        <table class="md">
+                            <tbody>
+                                <tr style="background-color: #ffff99; text-align: center">
+                                    <td><em>you type:</em>
+                                    </td>
+                                    <td><em>you see:</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>*italics*</td>
+                                    <td><em>italics</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>**bold**</td>
+                                    <td><b>bold</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>[reddit!](http://reddit.com)</td>
+                                    <td><a href="http://reddit.com">reddit!</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>* item 1
+                                        <br>* item 2
+                                        <br>* item 3</td>
+                                    <td>
+                                        <ul>
+                                            <li>item 1</li>
+                                            <li>item 2</li>
+                                            <li>item 3</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&gt; quoted text</td>
+                                    <td>
+                                        <blockquote>quoted text</blockquote>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Lines starting with four spaces
+                                        <br>are treated like code:
+                                        <br>
+                                        <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;</span>if 1 * 2 &lt; 3:
+                                        <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>print "hello, world!"
+                                        <br>
+                                    </td>
+                                    <td>Lines starting with four spaces
+                                        <br>are treated like code:
+                                        <br><pre>if 1 * 2 &lt; 3:<br>&nbsp;&nbsp;&nbsp;&nbsp;print "hello, world!"</pre>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>~~strikethrough~~</td>
+                                    <td><strike>strikethrough</strike>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>super^script</td>
+                                    <td>super<sup>script</sup>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="submit_text_conflict_box" style="display: none">
+                <div id="submit_text_conflict_diff"></div>
+                <div class="usertext">
+                    <input type="hidden" name="thing_id" value="">
+                    <div class="usertext-edit" style="">
+                        <div>
+                            <textarea rows="1" cols="1" name="submit_text_conflict_old" class=""></textarea>
+                        </div>
+                        <div class="bottom-area"><span class="help-toggle toggle" style=""><a class="option active " href="#" tabindex="100" onclick="return toggle(this, helpon, helpoff)">formatting help</a><a class="option " href="#">hide help</a></span><a href="/wiki/reddiquette"
+                            class="reddiquette" target="_blank" tabindex="100">reddiquette</a><span class="error TOO_LONG field-submit_text_conflict_old" style="display:none"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span>
+                            <span
+                            class="error NO_TEXT field-submit_text_conflict_old" style="display:none"></span><span class="error TOO_OLD field-parent" style="display:none"></span><span class="error DELETED_COMMENT field-parent" style="display:none"></span><span class="error DELETED_LINK field-parent" style="display:none"></span>
+                                <span
+                                class="error USER_BLOCKED field-parent" style="display:none"></span>
+                                    <div class="usertext-buttons">
+                                        <button type="submit" onclick="" class="save" style="display:none">save</button>
+                                        <button type="button" onclick="cancel_usertext(this)" class="cancel" style="display:none">cancel</button>
+                                    </div>
+                        </div>
+                        <div class="markhelp" style="display:none">
+                            <p></p>
+                            <p>reddit uses a slightly-customized version of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> for formatting. See below for some basics, or check <a href="/wiki/commenting">the commenting wiki page</a> for
+                                more detailed help and solutions to common issues.</p>
+
+                            <p></p>
+                            <table class="md">
+                                <tbody>
+                                    <tr style="background-color: #ffff99; text-align: center">
+                                        <td><em>you type:</em>
+                                        </td>
+                                        <td><em>you see:</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>*italics*</td>
+                                        <td><em>italics</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>**bold**</td>
+                                        <td><b>bold</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>[reddit!](http://reddit.com)</td>
+                                        <td><a href="http://reddit.com">reddit!</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>* item 1
+                                            <br>* item 2
+                                            <br>* item 3</td>
+                                        <td>
+                                            <ul>
+                                                <li>item 1</li>
+                                                <li>item 2</li>
+                                                <li>item 3</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&gt; quoted text</td>
+                                        <td>
+                                            <blockquote>quoted text</blockquote>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lines starting with four spaces
+                                            <br>are treated like code:
+                                            <br>
+                                            <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;</span>if 1 * 2 &lt; 3:
+                                            <br><span class="spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>print "hello, world!"
+                                            <br>
+                                        </td>
+                                        <td>Lines starting with four spaces
+                                            <br>are treated like code:
+                                            <br><pre>if 1 * 2 &lt; 3:<br>&nbsp;&nbsp;&nbsp;&nbsp;print "hello, world!"</pre>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>~~strikethrough~~</td>
+                                        <td><strike>strikethrough</strike>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>super^script</td>
+                                        <td>super<sup>script</sup>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><span class="error CONFLICT field-submit_text" style="display:none"></span>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">language</span> 
+        <div class="linefield-content">
+            <div class="delete-field">
+                <select id="lang" name="lang">
+                    <option value="ar">??????? [ar] (*)</option>
+                    <option value="be">?????????? ???? [be] (*)</option>
+                    <option value="bg">????????? ???? [bg] (*)</option>
+                    <option value="ca">català [ca] (*)</option>
+                    <option value="cs">cesky [cs]</option>
+                    <option value="da">dansk [da]</option>
+                    <option value="de">Deutsch [de] (*)</option>
+                    <option value="el">???????? [el]</option>
+                    <option selected="selected" value="en">English [en]</option>
+                    <option value="eo">Esperanto [eo] (*)</option>
+                    <option value="es">español [es]</option>
+                    <option value="et">eesti keel [et] (*)</option>
+                    <option value="eu">Euskara [eu]</option>
+                    <option value="fa">????? [fa] (*)</option>
+                    <option value="fi">suomi [fi] (*)</option>
+                    <option value="fr">français [fr]</option>
+                    <option value="he">????? [he] (*)</option>
+                    <option value="hi">???? ?????? [hi]</option>
+                    <option value="hr">hrvatski [hr]</option>
+                    <option value="hu">Magyar [hu] (*)</option>
+                    <option value="hy">??????? ????? [hy] (*)</option>
+                    <option value="id">Bahasa Indonesia [id] (*)</option>
+                    <option value="is">íslenska [is] (*)</option>
+                    <option value="it">italiano (Italy) [it]</option>
+                    <option value="ja">??? [ja] (*)</option>
+                    <option value="ko">??? [ko] (*)</option>
+                    <option value="la">Latin [la] (*)</option>
+                    <option value="lt">lietuviu kalba [lt] (*)</option>
+                    <option value="lv">latviešu valoda [lv] (*)</option>
+                    <option value="nl">Nederlands [nl]</option>
+                    <option value="nn">Nynorsk [nn]</option>
+                    <option value="no">Norsk [no]</option>
+                    <option value="pl">polski [pl] (*)</option>
+                    <option value="pt">português [pt] (*)</option>
+                    <option value="ro">româna [ro] (*)</option>
+                    <option value="ru">??????? [ru] (*)</option>
+                    <option value="sk">slovencina [sk] (*)</option>
+                    <option value="sl">slovenšcina [sl] (*)</option>
+                    <option value="sr">?????? ????? [sr]</option>
+                    <option value="sv">Svenska [sv]</option>
+                    <option value="ta">????? [ta] (*)</option>
+                    <option value="th">??????? [th] (*)</option>
+                    <option value="tr">Türkçe [tr] (*)</option>
+                    <option value="uk">?????????? ???? [uk] (*)</option>
+                    <option value="vi">Ti?ng Vi?t [vi] (*)</option>
+                    <option value="zh">?? [zh] (*)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">type</span> 
+        <div class="linefield-content">
+            <div class="delete-field">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="type" type="radio" id="type_public" value="public" class="nomargin" checked="checked">
+                                <label for="type_public">public</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">anyone can view and submit</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="type" type="radio" id="type_restricted" value="restricted" class="nomargin">
+                                <label for="type_restricted">restricted</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">anyone can view, but only some are approved to submit links</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="type" type="radio" id="type_private" value="private" class="nomargin">
+                                <label for="type_private">private</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">only approved members can view and submit</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table><span class="error INVALID_OPTION field-type" style="display:none"></span>
+            </div>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">content options</span> 
+        <div class="linefield-content">
+            <div class="delete-field">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="link_type" type="radio" id="link_type_any" value="any" class="nomargin" checked="checked">
+                                <label for="link_type_any">any</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">any link type is allowed</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="link_type" type="radio" id="link_type_link" value="link" class="nomargin">
+                                <label for="link_type_link">links only</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">only links to external sites are allowed</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="link_type" type="radio" id="link_type_self" value="self" class="nomargin">
+                                <label for="link_type_self">text posts only</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">only text/self posts are allowed</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table><span class="error INVALID_OPTION field-link_type" style="display:none"></span>
+            </div>
+            <div class="usertext-edit">
+                <div class="delete-field">
+                    <label for="submit_link_label">Custom label for submit link button (blank for default):</label>
+                    <input id="submit_link_label" type="text" name="submit_link_label" maxlength="60" placeholder="Submit a new link">
+                </div>
+                <div class="delete-field">
+                    <label for="submit_text_label">Custom label for submit text post button (blank for default):</label>
+                    <input id="submit_text_label" type="text" name="submit_text_label" maxlength="60" placeholder="Submit a new text post">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">wiki</span> 
+        <div class="linefield-content">
+            <div class="delete-field">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="wikimode" type="radio" id="wikimode_disabled" value="disabled" class="nomargin" checked="checked">
+                                <label for="wikimode_disabled">disabled</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">Wiki is disabled for all users except mods</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="wikimode" type="radio" id="wikimode_modonly" value="modonly" class="nomargin">
+                                <label for="wikimode_modonly">mod editing</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">Only mods, approved wiki contributors, or those on a page's edit list may edit</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrap nopadding">
+                                <input name="wikimode" type="radio" id="wikimode_anyone" value="anyone" class="nomargin">
+                                <label for="wikimode_anyone">anyone</label>
+                            </td>
+                            <td class="leftpad"><span class="gray">Anyone who can submit to the subreddit may edit</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table><span class="error INVALID_OPTION field-wikimode" style="display:none"></span>
+            </div>
+            <div class="usertext-edit">
+                <div class="delete-field">
+                    <label for="wiki_edit_karma">Subreddit karma required to edit and create wiki pages:</label>
+                    <input id="wiki_edit_karma" type="text" name="wiki_edit_karma" value="100"><span class="error BAD_NUMBER field-wiki_edit_karma" style="display:none"></span>
+                </div>
+                <div class="delete-field">
+                    <label for="wiki_edit_age">Account age (days) required to edit and create wiki pages:</label>
+                    <input id="wiki_edit_age" type="text" name="wiki_edit_age" value="0"><span class="error BAD_NUMBER field-wiki_edit_age" style="display:none"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">spam filter strength</span> 
+        <div class="linefield-content">
+            <div class="delete-field">
+                <p class="little gray">high is the standard filter, low disables most filtering, all will filter every post initially and they will need to be approved manually to be visible.</p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>links:</td>
+                            <td>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_links" id="spam_links_low" value="low">low</label>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_links" id="spam_links_high" value="high" checked="checked">high</label>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_links" id="spam_links_all" value="all">all</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>self posts:</td>
+                            <td>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_selfposts" id="spam_selfposts_low" value="low">low</label>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_selfposts" id="spam_selfposts_high" value="high" checked="checked">high</label>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_selfposts" id="spam_selfposts_all" value="all">all</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>comments:</td>
+                            <td>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_comments" id="spam_comments_low" value="low" checked="checked">low</label>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_comments" id="spam_comments_high" value="high">high</label>
+                                <label>
+                                    <input class="nomargin" type="radio" name="spam_comments" id="spam_comments_all" value="all">all</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="linefield "><span class="title">other options</span> 
+        <div class="linefield-content">
+            <div class="delete-field">
+                <ul>
+                    <li>
+                        <input class="nomargin" type="checkbox" name="over_18" id="over_18">
+                        <label for="over_18">viewers must be over eighteen years old</label>
+                    </li>
+                    <li>
+                        <input class="nomargin" type="checkbox" name="allow_top" id="allow_top" checked="checked">
+                        <label for="allow_top">allow this subreddit to be shown in the default set</label>
+                    </li>
+                    <li>
+                        <input class="nomargin" type="checkbox" name="show_media" id="show_media">
+                        <label for="show_media">show thumbnail images of content</label>
+                    </li>
+                    <li>
+                        <input class="nomargin" type="checkbox" name="exclude_banned_modqueue" id="exclude_banned_modqueue">
+                        <label for="exclude_banned_modqueue">exclude posts by site-wide banned users from modqueue/unmoderated</label>
+                    </li>
+                    <li>
+                        <input class="nomargin" type="checkbox" name="public_traffic" id="public_traffic">
+                        <label for="public_traffic">make the traffic stats page available to everyone</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="usertext-edit">
+                <div class="delete-field">
+                    <label for="comment_score_hide_mins">Minutes to hide comment scores:</label>
+                    <input id="comment_score_hide_mins" type="text" name="comment_score_hide_mins" value="0" placeholder="0"><span class="error BAD_NUMBER field-comment_score_hide_mins" style="display:none"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="save-button">
+        <button name="create" class="btn" type="button" onclick="return post_pseudo_form('#sr-form', 'site_admin')">create</button> <span class="status error"></span><span class="error RATELIMIT field-ratelimit" style="display:none"></span>
+    </div>
+</div>
+
+
+<script>
+function createSub(){
+	var name = document.getElementById("name").value,
+	pass = document.getElementById("pass").value
+	console.log( name + "  " + pass );
+	console.log("http://localhost:3000/?url=https://ssl.reddit.com/api/login&json={ api_type: 'json', passwd: '"+pass+"', rem: 'true', user: '"+name+"'}"); 
+	//console.log("http://localhost:3000/?url=https://ssl.reddit.com/api/login&json={test}");
+	$.get("http://localhost:3000/?type=login&url="+encodeURIComponent("https://ssl.reddit.com/api/login/tannerdaman1?user=tannerdaman1&passwd=tiki123"), function( data ) {		
+		alert( data );
+	});
+	
+}
+
+function login(){
+	var name = document.getElementById("username").value,
+	pass = document.getElementById("pass").value
+	console.log( name + "  " + pass );
+	console.log("http://localhost:3000/?url=https://ssl.reddit.com/api/login&json={ api_type: 'json', passwd: '"+pass+"', rem: 'true', user: '"+name+"'}"); 
+	//console.log("http://localhost:3000/?url=https://ssl.reddit.com/api/login&json={test}");
+	$.get("http://localhost:3000/?type=login&url="+encodeURIComponent("https://ssl.reddit.com/api/login/"+name+"?user="+name+"&passwd="+pass), function( data ) {		
+		alert( data );
+	});
+}
+
+
+
+</script>
+
+</body>
+
+</html>

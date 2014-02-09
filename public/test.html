@@ -779,7 +779,7 @@ function renderComments(){
 
 function make(com, comments,level){
 	for (var i = 0; i < comments.length; i++){
-		if (comments[i].data.body_html!=undefined) com.innerHTML += "<div class='comment' id='comLevel"+level+"num"+i+"'>" +decodeEntities(comments[i].data.body_html)+ "</div>"
+		if (comments[i].data.body_html!=undefined) com.innerHTML += makeComment(level, i, comments[i].data)
         else continue;
 		try{
 			if (comments[i].data.replies.data.children.length>0){
@@ -787,6 +787,18 @@ function make(com, comments,level){
 			}
 		}catch(e){}
 	}
+}
+
+function makeComment(level, i, data){
+    console.log(data);
+    var id = "'comLevel"+level+"num"+i+"'"
+    var com = "<div class='comment' id="+id+">" 
+        +"<div class='updown'><div class='up'></div><div class='down'></div></div>"
+        +"<div class='comInfo'><a class='shrink' onclick='return hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a></div>"
+        +decodeEntities(data.body_html)
+        + "</div>"
+
+    return com;
 }
 
 function decodeEntities(s){
@@ -797,7 +809,15 @@ function decodeEntities(s){
     return str;
 }
 
-
+function hideCommnet(e){
+    var con = e.parentNode.parentNode;
+    con.getElementsByClassName("md")[0].style.display = "none";
+    var subs = con.getElementsByClassName("comment");
+    for (var i = 0; i < subs.length; i++){
+        subs[i].style.display = "none";
+    }
+    return false;
+}
 
 </script>
 

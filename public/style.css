@@ -52,6 +52,46 @@ body {
     min-height: 100%;
 }
 
+.updown{
+    position: relative;
+    top:0px;
+    left: 0px;
+    width: 22px;
+    height: 34px;
+}
+.up{
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background:url(updown.png) 0 0;
+    width: 22px;
+    height: 17px;
+}
+.down{
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background:url(updown.png) 0 -17px;
+    width: 22px;
+    height: 17px;
+}
+
+.comInfo{
+    position: relative;
+    top: -32px;
+    left: 25px;
+}
+
+.comAuthor{
+    font-weight: bold;
+}
+
+.md{
+    position: relative;
+    top: -22px;
+    left: 25px;
+}
+
 textarea {
     font: normal small verdana,arial,helvetica,sans-serif;
 	width: 500px;

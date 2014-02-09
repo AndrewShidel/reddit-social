@@ -810,11 +810,13 @@ function decodeEntities(s){
 }
 
 function hideCommnet(e){
+    var display = "none";
     var con = e.parentNode.parentNode;
-    con.getElementsByClassName("md")[0].style.display = "none";
+    if (con.getElementsByClassName("md")[0].style.display == "none") display = "block"
+    con.getElementsByClassName("md")[0].style.display = display;
     var subs = con.getElementsByClassName("comment");
     for (var i = 0; i < subs.length; i++){
-        subs[i].style.display = "none";
+        subs[i].style.display = display;
     }
     return false;
 }

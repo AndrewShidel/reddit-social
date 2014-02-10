@@ -6,6 +6,8 @@ A demo of this project can be found at: [http://162.243.124.12:3000/demo.html](h
 
 A more detailed demo can be found at: [http://162.243.124.12:3000/test.html](http://162.243.124.12:3000/test.html "Reddit Social Demo")
 
+The initialization form can be found at: [http://162.243.124.12:3000/createSub.html](http://162.243.124.12:3000/createSub.html "Reddit Social init")
+
 To run the project:
 
 1. Clone the repo

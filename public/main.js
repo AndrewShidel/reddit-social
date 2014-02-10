@@ -15,7 +15,7 @@ var com = {
 		//document.body.innerHTML += "<div id='comments'></div>";
 		
 		
-		$.get("http://localhost:3000/get/?url="+url + "/.json", function(data){
+		$.get("./get/?url="+url + "/.json", function(data){
 			//com.innerHTML += "<p>" + data + "</p>";
 			
 			var obj = JSON.parse(data);

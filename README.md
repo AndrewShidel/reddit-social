@@ -9,6 +9,7 @@ A more detailed demo can be found at: [http://162.243.124.12:3000/test.html](htt
 
 The initialization form can be found at: [http://162.243.124.12:3000/createSub.html](http://162.243.124.12:3000/createSub.html "Reddit Social init")
 
+---
 
 
 To run the project:

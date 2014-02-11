@@ -19,15 +19,18 @@ var com = {
 		$.get("./get/?url="+url + "/.json", function(data){
 			//com.innerHTML += "<p>" + data + "</p>";
 			
-			var obj = JSON.parse(data);
-			var _comments = obj[1].data.children;
+			
 			
 			if (!JSON){
 				loadScript("./json.js", function(){
+					var obj = JSON.parse(data);
+					var _comments = obj[1].data.children;
 					com.make(com.view, _comments, 0);
 					callback();
 				})
 			}else{
+				var obj = JSON.parse(data);
+				var _comments = obj[1].data.children;
 				com.make(com.view, _comments, 0);
 				callback();
 			}

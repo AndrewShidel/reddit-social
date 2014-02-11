@@ -22,7 +22,7 @@ var com = {
 			
 			
 			if (typeof JSON == "undefined"){
-				loadScript("./json.js", function(){
+				com.loadScript("./json.js", function(){
 					var obj = JSON.parse(data);
 					var _comments = obj[1].data.children;
 					com.make(com.view, _comments, 0);

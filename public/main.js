@@ -85,7 +85,7 @@ var com = {
 	    var con = e.parentNode.parentNode;
 	    if (con.getElementsByClassName("md")[0].style.display == "none") display = "block"
 	    con.getElementsByClassName("md")[0].style.display = display;
-	    var subs = con.getElementsByClassName("comment");
+	    var subs = !com.simple?con.getElementsByClassName("comment"):con.getElementsByClassName("commentSimple");
 	    for (var i = 0; i < subs.length; i++){
 	        subs[i].style.display = display;
 	    }

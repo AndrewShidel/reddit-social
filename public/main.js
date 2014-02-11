@@ -23,7 +23,7 @@ var com = {
 			var _comments = obj[1].data.children;
 			
 			com.make(com.view, _comments, 0);
-			setTimeout(function(){callback()}, 1000);
+			callback()
 		});	
 	},
 

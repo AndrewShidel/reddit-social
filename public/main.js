@@ -1,5 +1,5 @@
 var com = {
-	create: function(params){
+	create: function(params){		
 		com.viewID = params.view
 		com.view = document.getElementById(params.view)
 		com.site = params.siteName;
@@ -8,6 +8,7 @@ var com = {
 	},
 
 	render: function(callback){
+		
 		var url = "reddit.com/r/"+com.site+"/comments/"+com.page;
 		console.log("URL: " + url);
 	    url = url.replace("http://", "");
@@ -21,8 +22,15 @@ var com = {
 			var obj = JSON.parse(data);
 			var _comments = obj[1].data.children;
 			
-			com.make(com.view, _comments, 0);
-			callback()
+			if (!JSON){
+				loadScript("./json.js", function(){
+					com.make(com.view, _comments, 0);
+					callback();
+				})
+			}else{
+				com.make(com.view, _comments, 0);
+				callback();
+			}
 		});	
 	},
 
@@ -101,6 +109,22 @@ var com = {
 	        subs[i].style.display = display;
 	    }
 	    return false;
+	},
+	loadScript: function(url, callback)
+	{
+		// Adding the script tag to the head as suggested before
+		var head = document.getElementsByTagName('head')[0];
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = url;
+
+		// Then bind the event to the callback function.
+		// There are several events for cross browser compatibility.
+		script.onreadystatechange = callback;
+		script.onload = callback;
+
+		// Fire the loading
+		head.appendChild(script);
 	}
 
 }

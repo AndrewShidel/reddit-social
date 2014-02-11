@@ -1,13 +1,14 @@
 var com = {
 
 	create: function(params){
-
+		com.viewID = params.view
 		com.view = document.getElementById(params.view)
 		com.site = params.siteName;
 		com.page = params.pageName;
+		com.simple = params.simple;
 	},
 
-	render: function(){
+	render: function(callback){
 		var url = "reddit.com/r/"+com.site+"/comments/"+com.page;
 		console.log("URL: " + url);
 	    url = url.replace("http://", "");
@@ -22,7 +23,7 @@ var com = {
 			var _comments = obj[1].data.children;
 			
 			com.make(com.view, _comments, 0);
-			
+			setTimeout(function(){callback()}, 1000);
 		});	
 	},
 
@@ -32,16 +33,18 @@ var com = {
 	        else continue;
 			try{
 				if (comments[i].data.replies.data.children.length>0){
-					com.make(document.getElementById("comLevel"+level+"num"+i), comments[i].data.replies.data.children, level+1);
+					com.make(document.getElementById("parent"+com.viewID+"comLevel"+level+"num"+i), comments[i].data.replies.data.children, level+1);
 				}
 			}catch(e){}
 		}
 	},
 
-	makeComment: function(level, i, data){
+	makeComment: function(level, i, data){		
+		var _class = com.simple?"commentSimple ":"comment " 
+		if (com.simple) _class += level%2==0?"comColor1":"comColor2";
 	    console.log(data);
-	    var id = "'comLevel"+level+"num"+i+"'"
-	    var comment = "<div class='comment' id="+id+">" 
+	    var id = "parent"+com.viewID+"comLevel"+level+"num"+i
+	    var comment = "<div class='"+_class+"' id="+id+">" 
 	        +"<div class='updown'><div class='up'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div class='down'></div></div>"
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
 	        +com.decodeEntities(data.body_html)

@@ -8,28 +8,57 @@
 <style>
 #comments{
 	position: relative;
-	width: 80%;
-	left: 10%;
+	width: 48%;
+	left: 1%;
 	display: inline-block;
-	background-color: #DDD;
+	background-color: #EEE;
+	border-radius: 10px;
 }
+
+#comments2{
+	position: absolute;
+	width: 48%;
+	left: 51%;
+	top: 23px;
+	display: inline-block;
+	background-color: #EEE;
+	border-radius: 10px;
+}
+
+#loading{
+	position: absolute;
+	left: 10%;
+	top: 200px;
+}
+
 </style>
 
 </head>
 
 
 <body>
-
+<img src="http://www.huntingdonarea.info/images/loading.gif" id="loading">
 <div id="comments"></div>
+<div id="comments2"></div>
 
 <script>
 com.create({
 	view: "comments",
 	pageName: "1xfvy7/eli5_what_happens_to_a_persons_creddit_card_debt/",
-	siteName: "explainlikeimfive"
+	siteName: "explainlikeimfive",
+	simple: true
 });
 
-com.render();
+com.render(function(){
+	document.getElementById("loading").style.left="60%"
+	com.create({
+		view: "comments2",
+		pageName: "1xihmj/the_best_selfie_i_ever_took_the_camel_knew_what/",
+		siteName: "pics",
+		simple: false
+	});
+	com.render(function(){document.getElementById("loading").style.display="none";});
+});
 </script>
 
 </body>

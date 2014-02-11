@@ -86,7 +86,7 @@ body {
 .comInfo{
     position: relative;
     top: -32px;
-    left: 25px;
+    left: 35px;
 }
 
 .comAuthor{
@@ -96,7 +96,7 @@ body {
 .md{
     position: relative;
     top: -22px;
-    left: 25px;
+    left: 35px;
     width:95%;
 }
 
@@ -107,9 +107,24 @@ textarea {
 }
 
 .comment{
-	border: 1px solid;
+	border: 1px solid #777;
 	margin: 10px;
 	padding: 10px;
+    border-radius: 10px;
+}
+.commentSimple{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #BBB;
+}
+
+.comColor1{
+    background-color: #FFF;
+}
+
+.comColor2{
+    background-color: #F7F7F8;
 }
 
 #comments{

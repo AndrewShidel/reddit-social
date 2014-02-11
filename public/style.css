@@ -95,9 +95,9 @@ body {
 
 .md{
     position: relative;
-    top: -22px;
-    left: 35px;
-    width:95%;
+	top: -22px;
+	right: -35px;
+	width: 88%;
 }
 
 textarea {

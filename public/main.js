@@ -21,7 +21,7 @@ var com = {
 			
 			
 			
-			if (!JSON){
+			if (typeof JSON == "undefined"){
 				loadScript("./json.js", function(){
 					var obj = JSON.parse(data);
 					var _comments = obj[1].data.children;

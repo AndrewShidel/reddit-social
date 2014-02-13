@@ -2,7 +2,8 @@ var express = require('express'),
     app = express(),
     request = require('request'),
     fs = require('fs'),
-    url = require('url');
+    url = require('url'),
+    https = require('https');
 	
 	
 app.listen(3000);
@@ -11,19 +12,24 @@ console.log('Listening on port 3000');
 app.use(express.static(__dirname + '/public'));
  
 app.get('/post/', function(req, res) {
-    //A function that takes a url and downloads the source. This will be defined in the next step.
-    //console.log("Get: " + req.params[0].substring(0));
 	console.log("URl: "+req.query.method+"\nJSON: "+JSON.parse(req.query.json).user);
-	//res.send("Done");
-	getSource("https://ssl.reddit.com/api/"+req.query.method+"/", JSON.parse(req.query.json), res);
+
+    var request = require("request");
+ 
+    request({
+      uri: "https://ssl.reddit.com/api/"+req.query.method+"/",
+      method: "POST",
+      form: JSON.parse(req.query.json)
+    }, function(error, response, body) {
+      console.log(body);
+      res.send(body)
+    });
 });
 
 app.get('/get/', function(req, res) {
     //A function that takes a url and downloads the source. This will be defined in the next step.
-    //console.log("Get: " + req.params[0].substring(0));
 	var url = "http://" + req.query.url;
 	console.log("Get: " + url);
-	//res.send("Done");
 	getSource2(url, res);
 });
 

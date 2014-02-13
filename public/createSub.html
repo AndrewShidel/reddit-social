@@ -185,7 +185,8 @@ function create(){
 function getModHash(user, pass, callback){
     console.log("getModHash called");
     //$.ajax({type:"GET", url:"https://ssl.reddit.com/api/me.json", success:function(d){console.log(d.data.modhash)}});
-    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}), success:function(d){console.log(d); callback(d.data.modhash);}});
+    console.log("http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}))
+    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}), success:function(d){d=JSON.parse(d); console.log(d); callback(d["json"]["data"]["modhash"]);}});
 }
 
 function login(callback){
@@ -198,6 +199,7 @@ function login(callback){
         console.log("user: " + user + "  pass: " + pass);
         getModHash(user, pass, function(mod){
             callback(mod);
+            document.getElementById("login").style.display="none";
         })
     }
 }

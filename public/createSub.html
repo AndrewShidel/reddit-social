@@ -41,6 +41,60 @@ body{
 	padding: 5px;
 	font-size: 14pt;
 }
+#login{
+    display: none;
+    position: absolute;
+    left: 40%;
+    background-color: #FEFEFE;
+    top: 0;
+    margin-top: 90px;
+    width: 20%;
+    text-align: left;
+    z-index: 1001;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    border-radius: 10px;
+}
+.formText{
+    margin-bottom: 0;
+    margin-top: 10px;
+    font-size: large;
+    font-weight: bold;
+    font-variant: small-caps;
+    color: #404040;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+#loginButton {
+    background-color: #777;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:6px;
+    color: #fff;
+    font-family: 'Oswald';
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+}
+
+
+
+#loginButton:hover {
+    border: none;
+    background:red;
+    box-shadow: 0px 0px 1px #777;
+}
+
+#register{
+    margin-left: 30px;
+    text-decoration: none;
+    font-size: 11pt;
+}
+
 </style>
 </head>
 
@@ -81,6 +135,8 @@ Miniutes before scores are shown: <input type="number" value="60"></input>
 <a onclick="create()"><div id='submit'><span id="subCon">Submit</span></div></a>
 </div>
 
+<div id="login"><h3 class="formText">login</h3><p class="formText">already have an account and just want to login?</p><input type="hidden" name="op" value="login"><div><ul><li class="name-entry"><label for="user_login" class="formText">username:</label><input value="" name="user" id="user_login" type="text" maxlength="20" tabindex="2" autofocus=""></li><li><label for="passwd_login" class="formText">password:</label><input id="passwd_login" name="passwd" type="password" tabindex="2"><span class="error WRONG_PASSWORD field-passwd" style="display:none"></span></li><li><input type="checkbox" name="rem" id="rem_login" tabindex="2"><label for="rem_login" class="formText">remember me</label></li></ul><p class="submit"><button id="loginButton" tabindex="2" >login</button><a href="https://ssl.reddit.com/login" id="register">OR REGISTER</a><span class="throbber"></span><span class="status" style="display: none;"></span></p></div></div>
+
 <script>
 var obj = {
     allow_top: "true",
@@ -117,15 +173,33 @@ var obj = {
 }
 
 function create(){
-	alert("Clicked")
-
-
-
+    var hash;
+    console.log("create clicked");
+    login(function(mod){
+        hash = mod;
+        alert(hash);
+    });
+	
 }
 
-function getModHash(){
+function getModHash(user, pass, callback){
+    console.log("getModHash called");
     //$.ajax({type:"GET", url:"https://ssl.reddit.com/api/me.json", success:function(d){console.log(d.data.modhash)}});
-    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:'password',user:'username',api_type:'json'}), success:function(d){console.log(d)}});
+    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}), success:function(d){console.log(d); callback(d.data.modhash);}});
+}
+
+function login(callback){
+    console.log("login called");
+    document.getElementById("login").style.display="block";
+    document.getElementById("loginButton").onclick = function() {
+        console.log("login clicked");
+        var user = document.getElementById("user_login").value,
+            pass = document.getElementById("passwd_login").value;
+        console.log("user: " + user + "  pass: " + pass);
+        getModHash(user, pass, function(mod){
+            callback(mod);
+        })
+    }
 }
 
 </script>

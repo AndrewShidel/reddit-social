@@ -95,6 +95,18 @@ ol, ul {
     font-size: 11pt;
 }
 
+#note{
+    display: none;
+    width: 400px;
+    position: relative;
+    top: 24pt;
+    border: 1px solid #000;
+    padding: 10px;
+    border-radius: 10px;
+    font-style: italic;
+    color: #F00;
+}
+
 </style>
 </head>
 
@@ -117,6 +129,10 @@ ol, ul {
 <br/><br/>
 Miniutes before scores are shown: <input type="number" id="timeMin" value="60"></input>
 <br/><br/>
+<input type="checkbox" onclick="accountBoxclick(this)" name="use_account" id="use_account">
+<label for="use_account">Use my Reddit account to submit new threads</label>
+<div id="note"><u>Note:</u>&nbsp In order to use this feature, your Reddit account must have above 10 karma.  If you do not have above 10 karma, the account "Reddit-Social-Comments" will post on your behaf until you have the needed karma.</div>
+<br><br>
 <input type="checkbox" name="over_18" id="over_18">
 <label for="over_18">Viewers must be over eighteen years old</label>
 <br/>
@@ -170,6 +186,15 @@ var obj = {
     wiki_edit_age: "0",
     wiki_edit_karma: "0",
     wikimode: "anyone"
+}
+
+function accountBoxclick(checkbox)
+{
+    if (checkbox.checked){
+        document.getElementById("note").style.display = "inline-block";
+    }else{
+        document.getElementById("note").style.display = "none";
+    }
 }
 
 function create(){

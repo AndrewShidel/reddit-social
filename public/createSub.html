@@ -112,10 +112,10 @@ ol, ul {
 <input type="text" name="name" id="siteTitle" class="text" value="">
 
 <p>Describe your site.  500 charactors max.</p>
-<textarea rows="1" cols="1" name="public_description" class=""></textarea>
+<textarea rows="1" id="description" cols="1" name="public_description" class=""></textarea>
 
 <br/><br/>
-Miniutes before scores are shown: <input type="number" value="60"></input>
+Miniutes before scores are shown: <input type="number" id="timeMin" value="60"></input>
 <br/><br/>
 <input type="checkbox" name="over_18" id="over_18">
 <label for="over_18">Viewers must be over eighteen years old</label>
@@ -147,7 +147,7 @@ var obj = {
     exclude_banned_modqueue: "",
     header_title: "", //was header - title
     lang: "en",
-    link_type: "",
+    link_type: "any",
     name: "",
     over_18: "",
     prev_description_id: "",
@@ -155,29 +155,45 @@ var obj = {
     prev_submit_text_id: "",
     public_description: "",
     public_traffic: "",
-    show_cname_sidebar: "",
+    show_cname_sidebar: "false",
     show_media: "",
-    spam_comments: "",
-    spam_links: "",
-    spam_selfposts: "",
+    spam_comments: "high",
+    spam_links: "high",
+    spam_selfposts: "high",
     sr: "",
     submit_link_label: "",
     submit_text: "",
     submit_text_label: "",
     title: "",
-    type: "",
+    type: "public",
     modhash: "", //was uh / X-Modhash header
-    wiki_edit_age: "",
-    wiki_edit_karma: "",
-    wikimode: ""
+    wiki_edit_age: "0",
+    wiki_edit_karma: "0",
+    wikimode: "anyone"
 }
 
 function create(){
     var hash;
     console.log("create clicked");
-    login(function(mod){
+    login(function(mod, cookie){
         hash = mod;
         alert(hash);
+
+        obj.comment_score_hide_mins = $("#timeMin").val();
+        obj.description = $("#description").val();
+        obj.header_title = $("#siteName").val();
+        obj.name = $("#siteName").val();
+        obj.over_18 = document.getElementById("over_18").checked;
+        obj.public_description = $("#description").val();
+        obj.public_traffic = document.getElementById("public_traffic").checked;
+        obj.show_media = document.getElementById("show_media").checked;
+        obj.title = $("#siteTitle").val();
+        obj.modhash = hash;
+
+        console.log(obj);
+
+        $.ajax({type:"GET", url:"./post/?method=site_admin&json="+JSON.stringify(obj)+"&cookie="+cookie, success:function(d){d=JSON.parse(d); console.log(d); }});
+
     });
 	
 }
@@ -185,8 +201,8 @@ function create(){
 function getModHash(user, pass, callback){
     console.log("getModHash called");
     //$.ajax({type:"GET", url:"https://ssl.reddit.com/api/me.json", success:function(d){console.log(d.data.modhash)}});
-    console.log("http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}))
-    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}), success:function(d){d=JSON.parse(d); console.log(d); callback(d["json"]["data"]["modhash"]);}});
+    console.log("./post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}))
+    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,rem:true,user:user,api_type:'json'}), success:function(d){d=JSON.parse(d); console.log(d); callback(d["json"]["data"]["modhash"], d["json"]["data"]["cookie"]);}});
 }
 
 function login(callback){
@@ -197,8 +213,8 @@ function login(callback){
         var user = document.getElementById("user_login").value,
             pass = document.getElementById("passwd_login").value;
         console.log("user: " + user + "  pass: " + pass);
-        getModHash(user, pass, function(mod){
-            callback(mod);
+        getModHash(user, pass, function(mod, cookie){
+            callback(mod, cookie);
             document.getElementById("login").style.display="none";
         })
     }

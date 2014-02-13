@@ -12,13 +12,28 @@ console.log('Listening on port 3000');
 app.use(express.static(__dirname + '/public'));
  
 app.get('/post/', function(req, res) {
-	console.log("URl: "+req.query.method+"\nJSON: "+JSON.parse(req.query.json).user);
+	//console.log("URl: "+req.query.method+"\nJSON: "+JSON.parse(req.query.json).user);
 
     var request = require("request");
- 
+    var header = {
+        'User-Agent': 'Reddit-Social-Comments'
+    };
+    var request = request.defaults({jar: true})
+    if (req.query.method=="site_admin"){
+        header = {
+            'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+            'Cookie': "reddit_session="+req.query.cookie,
+            'X-Modhash': JSON.parse(req.query.json).modhash
+        }
+        console.log("Headers: " + JSON.stringify(header));
+    }
+
+    
+
     request({
       uri: "https://ssl.reddit.com/api/"+req.query.method+"/",
       method: "POST",
+      headers: header,
       form: JSON.parse(req.query.json)
     }, function(error, response, body) {
       console.log(body);

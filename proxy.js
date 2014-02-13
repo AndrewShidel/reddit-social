@@ -13,9 +13,9 @@ app.use(express.static(__dirname + '/public'));
 app.get('/post/', function(req, res) {
     //A function that takes a url and downloads the source. This will be defined in the next step.
     //console.log("Get: " + req.params[0].substring(0));
-	console.log("URl: "+req.query.url+"\nJSON: "+req.query.json);
+	console.log("URl: "+req.query.method+"\nJSON: "+JSON.parse(req.query.json).user);
 	//res.send("Done");
-	getSource(req.query.url, req.query.json, res);
+	getSource("https://ssl.reddit.com/api/"+req.query.method+"/", JSON.parse(req.query.json), res);
 });
 
 app.get('/get/', function(req, res) {
@@ -25,6 +25,15 @@ app.get('/get/', function(req, res) {
 	console.log("Get: " + url);
 	//res.send("Done");
 	getSource2(url, res);
+});
+
+app.get("/test/", function(req, res){
+    getSource2("http://www.reddit.com/api/me.json", res);
+})
+
+app.get('/new/', function(req, res){
+    var subData = JSON.parse(req.query.subdata);
+    getSource("https://ssl.reddit.com/api/site_admin/", subData, res);
 });
 function getSource2(uri, res){
 	request(uri, function(error, response, body) {

@@ -2,6 +2,7 @@
 
 
 <head>
+    <script src="./jquery.min.js"></script> 
 <style>
 textarea{
 	width: 600;
@@ -60,6 +61,8 @@ body{
 <textarea rows="1" cols="1" name="public_description" class=""></textarea>
 
 <br/><br/>
+Miniutes before scores are shown: <input type="number" value="60"></input>
+<br/><br/>
 <input type="checkbox" name="over_18" id="over_18">
 <label for="over_18">Viewers must be over eighteen years old</label>
 <br/>
@@ -115,6 +118,14 @@ var obj = {
 
 function create(){
 	alert("Clicked")
+
+
+
+}
+
+function getModHash(){
+    //$.ajax({type:"GET", url:"https://ssl.reddit.com/api/me.json", success:function(d){console.log(d.data.modhash)}});
+    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:'password',user:'username',api_type:'json'}), success:function(d){console.log(d)}});
 }
 
 </script>

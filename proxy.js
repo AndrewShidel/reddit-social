@@ -41,6 +41,23 @@ app.get('/post/', function(req, res) {
     });
 });
 
+app.get('/req/', function(req, res) {
+    var filename = __dirname + "/info/" + req.query.site + "/" + req.query.page + ".json";
+    if (s.existsSync(filename)){
+        fs.readFile(filename,function(err, data){
+            if (!err){
+                var info = JSON.parse(data);
+                res.send(info.path);
+            }else{
+                res.send("Error");
+            }
+        });
+    }else{
+        //TODO: Make post to reddit, and add JSON containing path to info/site.
+    }
+});
+
+
 app.get('/get/', function(req, res) {
     //A function that takes a url and downloads the source. This will be defined in the next step.
 	var url = "http://" + req.query.url;

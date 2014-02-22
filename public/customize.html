@@ -1,0 +1,216 @@
+<html>
+
+<head>
+
+    <script type="text/javascript" src="shCore.js"></script>
+    <script type="text/javascript" src="shBrushJScript.js"></script>
+    <link href="shCore.css" rel="stylesheet" type="text/css" />
+    <link href="shThemeDefault.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        #codeContainer {}
+
+		@font-face
+		{
+			font-family: hnu;
+			src: url(HelveticaNeue-UltraLight.ttf);
+		}
+        #typebuttons{
+        	width: 300px;
+        	height: 50px;
+        	display: inline-flex;        	
+        }
+        #button1{
+        	width: 33%;
+			height: 100%;
+			background-color: #DDD;
+			border-radius: 5px 0px 0px 5px;
+			text-align: center;
+        }
+        #button2{
+        	width: 33%;
+			height: 100%;
+			background-color: #EEE;
+			border-left: 1px dotted #AAA;
+			border-right: 1px dotted #AAA;
+			text-align: center;
+        }
+        #button3{
+        	width: 33%;
+			height: 100%;
+			background-color: #EEE;
+			border-radius: 0px 5px 5px 0px;
+			text-align: center;
+        }
+        .text{ 
+        	font-family:hnu;
+        	line-height: 50px; 
+        	vertical-align:middle; 
+        	text-align: center;
+        }
+        td span {
+        }
+        .inline{
+            display: inline;
+        }
+        #container{
+            padding: 20px;
+            width: 550px;
+            margin: 0 auto;
+            border-width: 0 1px;
+        }
+    </style>
+
+    <script>
+        var cust,
+        selected="button1";
+        document.onload = function () {
+            cust = window.location.hash.substring(1);
+        }
+
+        function writeCode(){
+        		var code = "";
+
+        		document.getelementById("code").innerHTML=code;
+        	    SyntaxHighlighter.all();
+        }
+
+        function barClick(ele){
+        	ele.style.backgroundColor="#DDD";
+        	selected=ele.id;
+        	var barButtons = document.getElementsByClassName("barButton");
+        	for (var i=0; i < barButtons.length; i++){
+        		if (barButtons[i].id != ele.id) barButtons[i].style.backgroundColor="#EEE";
+        	}
+        	eval(ele.id+"()");
+        }
+
+        function button1(){
+            var text={view: "comments"};
+            text.siteName=selected;
+            text.pageName="";
+            text.type="light";
+            console.log(text);
+            var final = "com.create("+JSON.stringify(text, null, "\t")+");\ncom.render();";        	
+            document.getElementById("code").innerHTML=final;
+        	SyntaxHighlighter.highlight();
+        }
+        function button2(){
+        	
+        }
+        function button3(){
+        	
+        }
+
+    </script>
+
+</head>
+
+
+
+<body>
+    <div id="container">
+	<div id="typeButtons">
+		<div class="barButton" onclick="barClick(this)" id="button1"><span class="text">LIGHT</span></div>
+		<div class="barButton" onclick="barClick(this)" id="button2"><span class="text">DARK</span></div>
+		<div class="barButton" onclick="barClick(this)" id="button3"><span class="text">CLASSIC</span></div>
+	</div>
+    <br><br><br>
+
+    <table>
+
+        <tr>
+            <td>
+                <span>Background Color:</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text"></input>
+                <input type="color" name="color" id="backgroundcolor" class="color" value="#EEEEEE">
+            <td>                
+        </tr>
+        <tr><td>&nbsp</td></tr>
+        <tr>
+            <td>
+                <span>Comment Level 1:</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text"></input>
+                <input type="color" name="color" id="comment1color" class="color" value="#FFFFFF">
+            </td>
+        </tr>        
+        <tr>
+            <td>
+                <span>Comment Level 2:</span>
+            </td>
+        </tr>
+            <td>
+                <input type="text"></input>
+                <input type="color" name="color" id="comment2color" class="color" value="#F7F7F8">
+            </td>
+        </tr>
+        <tr><td>&nbsp</td></tr>
+         <tr>
+            <td>
+                <span>Font:</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select style="width: 300px;">
+                    <option><span style="font-family:'American Typewriter', 'Courier New', Courier, Monaco, mono">‘American Typewriter’, ‘Courier New’, Courier, Monaco, mono</span></option><option selected><span style="font-family:'Arial Rounded MT Bold', Helvetica, Arial, sans-serif">‘Arial Rounded MT Bold’, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Baskerville, Georgia, Garamond, 'Times New Roman', Times, serif">Baskerville, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Book Antiqua', Georgia, Garamond, 'Times New Roman', Times, serif">‘Book Antiqua’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Bookman Old Style', Georgia, Garamond, 'Times New Roman', Times, serif">‘Bookman Old Style’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Brush Script MT', 'Comic Sans', sans-serif">‘Brush Script MT’, ‘Comic Sans’, sans-serif</span></option><option><span style="font-family:Chalkboard, 'Comic Sans', sans-serif">Chalkboard, ‘Comic Sans’, sans-serif</span></option><option><span style="font-family:Didot, Georgia, Garamond, 'Times New Roman', Times, serif">Didot, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:Futura, Impact, Helvetica, Arial, sans-serif">Futura, Impact, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Gill Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif">‘Gill Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">‘Helvetica Neue’, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Hoefler Text', Garamond, Georgia, 'Times New Roman', Times, serif">‘Hoefler Text’, Garamond, Georgia, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Lucida Grande', 'Lucida Sans Unicode', Lucida, Verdana, Helvetica, Arial, sans-serif">‘Lucida Grande’, ‘Lucida Sans Unicode’, Lucida, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Marker Felt', 'Comic Sans' sans-serif">‘Marker Felt’, ‘Comic Sans’ sans-serif</span></option><option><span style="font-family:Myriad, Helvetica, Arial, sans-serif">Myriad, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Optima, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif">Optima, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Palatino, 'Book Antiqua', Georgia, Garamond, 'Times New Roman', Times, serif">Palatino, ‘Book Antiqua’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:Cochin, Georgia, Garamond, 'Times New Roman', Times, serif">Cochin, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Goudy Old Style', garamond, 'book antiqua', 'Times New Roman', Times, serif sequence">‘Goudy Old Style’, garamond, ‘book antiqua’, ‘Times New Roman’, Times, serif sequence</span></option>
+                </select>
+                <select>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12" selected>12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                </select>
+                <input type="color" name="color" id="fontColor" class="color" value="#000000">
+            </td>
+        </tr>
+
+        <tr><td>&nbsp</td></tr>
+
+        <tr>
+            <td>
+                <span>Comment Borders:</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="inline">Size:</div>
+                <input type="number"></input>
+                <div class="inline">Style:</div>
+                <select>
+                    <option></option>
+                </select>
+                <div class="inline">Color:</div>
+                <input type="color"></input>
+                <div class="inline">Radius:</div>
+                <input type="number"></input>
+            </td>
+        </tr>
+       
+    </table>
+
+    <div id="codeContainer">
+        <pre id="code" class = 'brush: js'>
+        </pre>
+    </div>
+</div>
+</body>
+
+
+</html>

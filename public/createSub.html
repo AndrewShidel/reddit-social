@@ -10,7 +10,7 @@ textarea{
 	font-size: 12pt;
 }
 #container{
-	width: 800px;
+	width: 500px;
 	margin: 0 auto;
 	border-width: 0 1px;
 	background: #FFF;
@@ -18,7 +18,7 @@ textarea{
 	border-radius: 10px;
 }
 body{
-	background: #AAA;
+	
 }
 #submit{
 	position: relative;
@@ -148,7 +148,7 @@ Miniutes before scores are shown: <input type="number" id="timeMin" value="60"><
 <input type="checkbox" name="public_traffic" id="public_traffic">
 <label for="public_traffic">Make the traffic stats page available to everyone</label>
 <br/>
-<a onclick="create()"><div id='submit'><span id="subCon">Submit</span></div></a>
+<a onclick="create()"><div id='submit'><span id="subCon">Next</span></div></a>
 </div>
 
 <div id="login"><h3 class="formText">login</h3><p class="formText">already have an account and just want to login?</p><input type="hidden" name="op" value="login"><div><ul><li class="name-entry"><label for="user_login" class="formText">username:</label><input value="" name="user" id="user_login" type="text" maxlength="20" tabindex="2" autofocus=""></li><li><label for="passwd_login" class="formText">password:</label><input id="passwd_login" name="passwd" type="password" tabindex="2"><span class="error WRONG_PASSWORD field-passwd" style="display:none"></span></li><li><input type="checkbox" name="rem" id="rem_login" tabindex="2"><label for="rem_login" class="formText">remember me</label></li></ul><p class="submit"><button id="loginButton" tabindex="2" >login</button><a href="https://ssl.reddit.com/login" id="register">OR REGISTER</a><span class="throbber"></span><span class="status" style="display: none;"></span></p></div></div>

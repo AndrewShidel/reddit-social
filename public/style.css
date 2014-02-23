@@ -6,7 +6,7 @@
     user-select: none;
 }
 
-html {
+/*html {
     height: 100%;
 	padding: 15px;
 }
@@ -14,42 +14,42 @@ html {
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td,iframe {
     margin: 0;
     padding: 0;
-}
+}*/
 
-table {
+.comments table {
     border-collapse: collapse;
 }
 
-fieldset,img {
+.comments fieldset,.comments img {
     border: 0;
 }
 
-address,caption,cite,code,dfn,em,strong,th,var {
+.comments address,.comments caption,.comments cite,.comments .comments code,.comments dfn,.comments em,.comments strong,.comments th,.comments var {
     font-style: normal;
     font-weight: normal;
 }
 
-ol,ul {
+.comments ol,.comments ul {
     list-style: none;
 }
 
-caption,th {
+.comments caption,.comments th {
     text-align: left;
 }
 
-h1,h2,h3,h4,h5,h6 {
+.comments h1,.comments h2,.comments h3,.comments h4,.comments h5,.comments h6 {
     font-size: 100%;
 }
 
-q:before,q:after {
+.comments q:before,.comments q:after {
     content: '';
 }
 
-body {
+.comments {
     font: normal x-small verdana,arial,helvetica,sans-serif;
     background-color: white;
     z-index: 1;
-    min-height: 100%;
+    /*min-height: 100%;*/
 }
 
 .updown{
@@ -100,7 +100,7 @@ body {
 	width: 88%;
 }
 
-textarea {
+.comments textarea {
     font: normal small verdana,arial,helvetica,sans-serif;
 	width: 500px;
 	height: 200px;
@@ -127,62 +127,62 @@ textarea {
     background-color: #F7F7F8;
 }
 
-#comments{
+/*#comments{
 	display: inline-block;
 	position: absolute;
 	width: 1000px;
 	top: 10px;
 	left: 10px;
 	background-color: #DDD;
-}
+}*/
 
 
 
-button,html input[type="button"],input[type="reset"],input[type="submit"] {
+.comments button,html input[type="button"],input[type="reset"],input[type="submit"] {
     -webkit-appearance: button;
     cursor: pointer;
 }
 
-button[disabled],html input[disabled] {
+.comments button[disabled],html input[disabled] {
     cursor: default;
 }
 
-input[type=hidden] {
+.comments input[type=hidden] {
     position: absolute;
 }
 
-h1 {
+.comments h1 {
     font-size: 18px;
     font-weight: normal;
     margin: 10px 0;
 }
 
-h2 {
+.comments h2 {
     color: #369;
     font-size: 13px;
 }
 
-h2 a {
+.comments h2 a {
     text-decoration: none;
 }
 
-h2 a:visited {
+.comments h2 a:visited {
     color: #336699;
 }
 
-h2 a:hover {
+.comments h2 a:hover {
     text-decoration: underline;
 }
 
-h3 {
+.comments h3 {
     font-size: 110%;
 }
 
-a img {
+.comments a img {
     border: 0 none;
 }
 
-a {
+.comments a {
     text-decoration: none;
     color: #369;
 }
@@ -209,7 +209,7 @@ input.txt {
     border: 1px solid #369;
 }
 
-input[type=checkbox],input[type=radio] {
+.comments input[type=checkbox],.comments input[type=radio] {
     margin-top: .4em;
 }
 

@@ -6,7 +6,7 @@ Reddit Social is an attempt to build a commenting system system similar to [Face
 
 A demo of this project can be found at: [http://162.243.124.12:3000/demo.html](http://162.243.124.12:3000/demo.html "Reddit Social Demo") (This may take several seconds to display)
 
-The initialization form can be found at: [http://162.243.124.12:3000/createSub.html](http://162.243.124.12:3000/createSub.html "Reddit Social init")
+The initialization form can be found at: [http://162.243.124.12:3000/creator.html](http://162.243.124.12:3000/creator.html "Reddit Social init")
 
 ---
 

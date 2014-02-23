@@ -6,13 +6,21 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <style>
-#comments{
+/*#comments{
 	position: relative;
 	width: 48%;
 	left: 1%;
 	display: inline-block;
 	background-color: #EEE;
 	border-radius: 10px;
+}*/
+#comments{
+	display: inline-block;
+	position: absolute;
+	width: 1000px;
+	top: 10px;
+	left: 10px;
+	background-color: #DDD;
 }
 
 #comments2{
@@ -38,8 +46,8 @@
 
 <body>
 <img src="http://www.huntingdonarea.info/images/loading.gif" id="loading">
-<div id="comments"></div>
-<div id="comments2"></div>
+<div id="comments" class="comments"></div>
+<div id="comments2" class="comments"></div>
 
 <script>
 com.create({

@@ -63,7 +63,19 @@
 
     <script>
         var cust,
-        selected="button1";
+        selected="button1",
+        settings = {
+            "backgroundcolor": "#EEEEEE",
+            "comment1color": "#FFFFFF",
+            "comment2color": "#F7F7F8",
+            "fontFamily": "‘Arial Rounded MT Bold’, Helvetica, Arial, sans-serif",
+            "fontSize": "12",
+            "fontColor": "#000000",
+            "borderSize": "1",
+            "borderColor": "#000000",
+            "borderStyle": "Solid",
+            "borderRadius": "5"
+        }
         document.onload = function () {
             cust = window.location.hash.substring(1);
         }
@@ -102,6 +114,13 @@
         	
         }
 
+        function change(ele){
+            settings[ele.id] = ele.value;
+            console.log(" ");
+            console.log(ele.value);
+            console.log(settings);
+        }
+
     </script>
 
 </head>
@@ -127,7 +146,7 @@
         <tr>
             <td>
                 <input type="text"></input>
-                <input type="color" name="color" id="backgroundcolor" class="color" value="#EEEEEE">
+                <input onchange="change(this);" type="color" name="color" id="backgroundcolor" class="color" value="#EEEEEE">
             <td>                
         </tr>
         <tr><td>&nbsp</td></tr>
@@ -139,7 +158,7 @@
         <tr>
             <td>
                 <input type="text"></input>
-                <input type="color" name="color" id="comment1color" class="color" value="#FFFFFF">
+                <input onchange="change(this);" type="color" name="color" id="comment1color" class="color" value="#FFFFFF">
             </td>
         </tr>        
         <tr>
@@ -149,7 +168,7 @@
         </tr>
             <td>
                 <input type="text"></input>
-                <input type="color" name="color" id="comment2color" class="color" value="#F7F7F8">
+                <input onchange="change(this);" type="color" name="color" id="comment2color" class="color" value="#F7F7F8">
             </td>
         </tr>
         <tr><td>&nbsp</td></tr>
@@ -160,10 +179,10 @@
         </tr>
         <tr>
             <td>
-                <select style="width: 300px;">
+                <select onchange="change(this);" id="fontFamily" style="width: 300px;">
                     <option><span style="font-family:'American Typewriter', 'Courier New', Courier, Monaco, mono">‘American Typewriter’, ‘Courier New’, Courier, Monaco, mono</span></option><option selected><span style="font-family:'Arial Rounded MT Bold', Helvetica, Arial, sans-serif">‘Arial Rounded MT Bold’, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Baskerville, Georgia, Garamond, 'Times New Roman', Times, serif">Baskerville, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Book Antiqua', Georgia, Garamond, 'Times New Roman', Times, serif">‘Book Antiqua’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Bookman Old Style', Georgia, Garamond, 'Times New Roman', Times, serif">‘Bookman Old Style’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Brush Script MT', 'Comic Sans', sans-serif">‘Brush Script MT’, ‘Comic Sans’, sans-serif</span></option><option><span style="font-family:Chalkboard, 'Comic Sans', sans-serif">Chalkboard, ‘Comic Sans’, sans-serif</span></option><option><span style="font-family:Didot, Georgia, Garamond, 'Times New Roman', Times, serif">Didot, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:Futura, Impact, Helvetica, Arial, sans-serif">Futura, Impact, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Gill Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif">‘Gill Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">‘Helvetica Neue’, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Hoefler Text', Garamond, Georgia, 'Times New Roman', Times, serif">‘Hoefler Text’, Garamond, Georgia, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Lucida Grande', 'Lucida Sans Unicode', Lucida, Verdana, Helvetica, Arial, sans-serif">‘Lucida Grande’, ‘Lucida Sans Unicode’, Lucida, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Marker Felt', 'Comic Sans' sans-serif">‘Marker Felt’, ‘Comic Sans’ sans-serif</span></option><option><span style="font-family:Myriad, Helvetica, Arial, sans-serif">Myriad, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Optima, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif">Optima, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Palatino, 'Book Antiqua', Georgia, Garamond, 'Times New Roman', Times, serif">Palatino, ‘Book Antiqua’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:Cochin, Georgia, Garamond, 'Times New Roman', Times, serif">Cochin, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Goudy Old Style', garamond, 'book antiqua', 'Times New Roman', Times, serif sequence">‘Goudy Old Style’, garamond, ‘book antiqua’, ‘Times New Roman’, Times, serif sequence</span></option>
                 </select>
-                <select>
+                <select id="fontSize" onchange="change(this);">
                     <option value="5">5</option>
                     <option value="6">6</option>
                     <option value="7">7</option>
@@ -177,7 +196,7 @@
                     <option value="15">15</option>
                     <option value="16">16</option>
                 </select>
-                <input type="color" name="color" id="fontColor" class="color" value="#000000">
+                <input onchange="change(this);" type="color" name="color" id="fontColor" class="color" value="#000000">
             </td>
         </tr>
 
@@ -191,15 +210,17 @@
         <tr>
             <td>
                 <div class="inline">Size:</div>
-                <input type="number"></input>
-                <div class="inline">Style:</div>
-                <select>
-                    <option></option>
+                <input onchange="change(this);" id="borderSize" type="number"></input>
+                <div onchange="change(this);" class="inline">Style:</div>
+                <select onchange="change(this);" id="borderStyle">
+                    <option selected>Solid</option>
+                    <option>Dotted</option>
+                    <option>Dashed</option>
                 </select>
                 <div class="inline">Color:</div>
-                <input type="color"></input>
+                <input onchange="change(this);" id="borderColor" type="color"></input>
                 <div class="inline">Radius:</div>
-                <input type="number"></input>
+                <input onchange="change(this);" id="borderRadius" type="number"></input>
             </td>
         </tr>
        

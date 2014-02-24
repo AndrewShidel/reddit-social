@@ -104,6 +104,7 @@
 
     <script>
         var cust,
+        timeout=null,
         selected="button1",
         lightSettings = {
             "backgroundcolor": "#EEEEEE",
@@ -215,11 +216,12 @@
         }
 
         function change(ele){
+            if (timeout!=null)clearTimeout(timeout);
             settings[ele.id] = ele.value;
-            console.log(" ");
-            console.log(ele.value);
-            console.log(settings);
-            refresh();
+            timeout = window.setTimeout(function(){                
+                refresh();
+                timeout=null;
+            }, 1000);
         }
 
         function refresh(){

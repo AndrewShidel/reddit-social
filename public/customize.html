@@ -9,13 +9,22 @@
     <link href="shThemeDefault.css" rel="stylesheet" type="text/css" />
 
     <style>
-        #codeContainer {
+        /*#codeContainer {
             position: relative;
             width: 28%;
             left: 36%;
             top: 30px;
             z-index: 1;
+        }*/
+
+        #codeContainer {
+            position: absolute;
+            width: 40%;
+            left: 50%;
+            top: 105px;
+            z-index: 3;
         }
+
 
 		@font-face
 		{
@@ -89,6 +98,7 @@
         #table{
             font: normal small verdana,arial,helvetica,sans-serif;
         }
+        
     </style>
 
     <script>
@@ -141,18 +151,40 @@
             "borderColor": "#000000",
             "borderStyle": "Solid",
             "borderRadius": "5"
+        },
+        def={
+            view: "comments",
+            pageName: "1xfvy7/eli5_what_happens_to_a_persons_creddit_card_debt/",
+            siteName: "explainlikeimfive",
+            simple: true,
+            type: "light"
         }
+        
 
         window.onload = function () {
             refresh();
             cust = window.location.hash.substring(1);
+            writeCode();
         }
 
         function writeCode(){
-        		var code = "";
+        	/*var text={view: "comments"};
+            text=settings;
+            text.siteName=selected;
+            text.pageName="";
+            text.type="light";
+            console.log(text);*/
+            text=def;
+            var final = "com.create("+JSON.stringify(text, null, "\t")+");\ncom.render();";      
 
-        		document.getelementById("code").innerHTML=code;
-        	    SyntaxHighlighter.all();
+            var brush = new SyntaxHighlighter.brushes.JScript(),
+                html;
+            brush.init({ toolbar: false });
+            html = brush.getHtml(final);
+
+            document.getElementById("codeContainer").innerHTML=html;
+            //SyntaxHighlighter.highlight();
+            window.parent.view.sizeFrame("viewFrame");
         }
 
         function barClick(ele){
@@ -166,21 +198,19 @@
         }
 
         function button1(){
-            var text={view: "comments"};
-            text.siteName=selected;
-            text.pageName="";
-            text.type="light";
-            console.log(text);
-            var final = "com.create("+JSON.stringify(text, null, "\t")+");\ncom.render();";        	
-            document.getElementById("code").innerHTML=final;
-        	SyntaxHighlighter.highlight();
-            window.parent.view.sizeFrame("viewFrame");
+            selected="button1"
+            def.type="light";
+            writeCode();
         }
         function button2(){
-        	
+            selected="button2"
+            def.type="dark";
+        	writeCode();
         }
         function button3(){
-        	
+            selected="button3"
+            def.type="classic";
+        	writeCode();
         }
 
         function change(ele){
@@ -214,6 +244,9 @@
                 obj[key]=differences[key];
             }
             obj["type"]=type;
+
+            def=obj;
+            writeCode();
             //document.getElementById("comments").innerHTML = "";
             com.create(obj);
             com.render(function(){window.parent.view.sizeFrame("viewFrame")});

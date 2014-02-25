@@ -21,7 +21,15 @@ var com = {
         //if (typeof params.backgroundcolor != undefined) getCSSRule(".comColor1").style.backgroundColor = params.backgroundcolor;
         if (params.comment1color != undefined) $('.comColor1').css('background-color', params.comment1color);
         if (params.comment2color != undefined){ $('.comColor2').css('background-color', params.comment2color);}
-        if (params.fontFamily != undefined) $(".comments").css("font", "normal x-small "+params.fontFamily);
+        if (params.fontFamily != undefined) $(".comments").css("font-family", params.fontFamily);
+        if (params.fontSize!= undefined) $(".comments").css("font-size", params.fontSize+"pt");
+        if (params.fontColor!= undefined) $(".comments").css("color", params.fontColor);
+
+        if (params.borderRadius!= undefined) $(".commentSimple").css("border-radius", params.borderRadius);
+        if (params.borderStyle!= undefined) $(".commentSimple").css("border-style", params.borderStyle);
+        if (params.borderColor!= undefined) $(".commentSimple").css("border-color", params.borderColor);
+        if (params.borderSize!= undefined) $(".commentSimple").css("border-width", params.borderSize);
+
         /*if (typeof params.backgroundcolor != undefined) getCSSRule(".comColor1").style.backgroundColor = params.backgroundcolor;
         if (typeof params.backgroundcolor != undefined) getCSSRule(".comColor1").style.backgroundColor = params.backgroundcolor;
         if (typeof params.backgroundcolor != undefined) getCSSRule(".comColor1").style.backgroundColor = params.backgroundcolor;*/

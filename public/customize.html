@@ -20,7 +20,7 @@
         #codeContainer {
             position: absolute;
             width: 40%;
-            left: 50%;
+            left: 54%;
             top: 105px;
             z-index: 3;
         }
@@ -82,7 +82,7 @@
         }
         #container {
            position: relative;
-           left: -50%;
+           left: -60%;
            float: left;
            z-index: 2;
         }
@@ -98,6 +98,9 @@
         }
         #table{
             font: normal small verdana,arial,helvetica,sans-serif;
+        }
+        input[type=number]{
+            width: 40px;
         }
         
     </style>
@@ -164,7 +167,7 @@
         
 
         window.onload = function () {
-            refresh();
+            refresh(true);
             cust = window.location.hash.substring(1);
             writeCode();
         }
@@ -216,15 +219,11 @@
         }
 
         function change(ele){
-            if (timeout!=null)clearTimeout(timeout);
-            settings[ele.id] = ele.value;
-            timeout = window.setTimeout(function(){                
-                refresh();
-                timeout=null;
-            }, 1000);
+            settings[ele.id] = ele.value;          
+            refresh();
         }
 
-        function refresh(){
+        function refresh(get){
             var differences, type;
             if (selected=="button1"){
                 differences=compare(settings, lightSettings);
@@ -247,12 +246,14 @@
                 obj[key]=differences[key];
             }
             obj["type"]=type;
-
+            console.log(JSON.stringify(obj, null, "\t"));
             def=obj;
             writeCode();
             //document.getElementById("comments").innerHTML = "";
             com.create(obj);
-            com.render(function(){window.parent.view.sizeFrame("viewFrame")});
+            if (get){                
+                com.render(function(){window.parent.view.sizeFrame("viewFrame")});
+            }
         }
 
         function compare(current, main){
@@ -358,20 +359,8 @@
                 <select onchange="change(this);" id="fontFamily" style="width: 300px;">
                     <option><span style="font-family:'American Typewriter', 'Courier New', Courier, Monaco, mono">‘American Typewriter’, ‘Courier New’, Courier, Monaco, mono</span></option><option selected><span style="font-family:'Arial Rounded MT Bold', Helvetica, Arial, sans-serif">‘Arial Rounded MT Bold’, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Baskerville, Georgia, Garamond, 'Times New Roman', Times, serif">Baskerville, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Book Antiqua', Georgia, Garamond, 'Times New Roman', Times, serif">‘Book Antiqua’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Bookman Old Style', Georgia, Garamond, 'Times New Roman', Times, serif">‘Bookman Old Style’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Brush Script MT', 'Comic Sans', sans-serif">‘Brush Script MT’, ‘Comic Sans’, sans-serif</span></option><option><span style="font-family:Chalkboard, 'Comic Sans', sans-serif">Chalkboard, ‘Comic Sans’, sans-serif</span></option><option><span style="font-family:Didot, Georgia, Garamond, 'Times New Roman', Times, serif">Didot, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:Futura, Impact, Helvetica, Arial, sans-serif">Futura, Impact, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Gill Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif">‘Gill Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">‘Helvetica Neue’, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Hoefler Text', Garamond, Georgia, 'Times New Roman', Times, serif">‘Hoefler Text’, Garamond, Georgia, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Lucida Grande', 'Lucida Sans Unicode', Lucida, Verdana, Helvetica, Arial, sans-serif">‘Lucida Grande’, ‘Lucida Sans Unicode’, Lucida, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:'Marker Felt', 'Comic Sans' sans-serif">‘Marker Felt’, ‘Comic Sans’ sans-serif</span></option><option><span style="font-family:Myriad, Helvetica, Arial, sans-serif">Myriad, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Optima, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif">Optima, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, Helvetica, Arial, sans-serif</span></option><option><span style="font-family:Palatino, 'Book Antiqua', Georgia, Garamond, 'Times New Roman', Times, serif">Palatino, ‘Book Antiqua’, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:Cochin, Georgia, Garamond, 'Times New Roman', Times, serif">Cochin, Georgia, Garamond, ‘Times New Roman’, Times, serif</span></option><option><span style="font-family:'Goudy Old Style', garamond, 'book antiqua', 'Times New Roman', Times, serif sequence">‘Goudy Old Style’, garamond, ‘book antiqua’, ‘Times New Roman’, Times, serif sequence</span></option>
                 </select>
-                <select id="fontSize" onchange="change(this);">
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12" selected>12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                </select>
+                <input type="number" id="fontSize" onchange="change(this);" value="8"></input>
+                  
                 <input onchange="change(this);" type="color" name="color" id="fontColor" class="color" value="#000000">
             </td>
         </tr>
@@ -386,7 +375,7 @@
         <tr>
             <td>
                 <div class="inline">Size:</div>
-                <input onchange="change(this);" id="borderSize" type="number"></input>
+                <input onchange="change(this);" id="borderSize" width="20" value="1" type="number"></input>
                 <div onchange="change(this);" class="inline">Style:</div>
                 <select onchange="change(this);" id="borderStyle">
                     <option selected>Solid</option>
@@ -394,9 +383,9 @@
                     <option>Dashed</option>
                 </select>
                 <div class="inline">Color:</div>
-                <input onchange="change(this);" id="borderColor" type="color"></input>
+                <input onchange="change(this);" id="borderColor" value="#BBBBBB" type="color"></input>
                 <div class="inline">Radius:</div>
-                <input onchange="change(this);" id="borderRadius" type="number"></input>
+                <input onchange="change(this);" id="borderRadius" value="10" type="number"></input>
             </td>
         </tr>
        

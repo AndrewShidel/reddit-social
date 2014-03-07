@@ -219,6 +219,10 @@
         }
 
         function change(ele){
+            if (ele.tagName.toLowerCase()=="input"){
+                if (ele.type=="color") ele.parentNode.getElementsByTagName("input")[0].value=ele.value; 
+                else if (ele.type=="text" && (ele.id==null || ele.id==undefined)) return; 
+            }
             settings[ele.id] = ele.value;          
             refresh();
         }
@@ -322,7 +326,7 @@
         </tr>
         <tr>
             <td>
-                <input type="text"></input>
+                <input type="text" value="#EEEEEE"></input>
                 <input onchange="change(this);" type="color" name="color" id="backgroundcolor" class="color" value="#EEEEEE">
             <td>                
         </tr>
@@ -334,7 +338,7 @@
         </tr>
         <tr>
             <td>
-                <input type="text"></input>
+                <input type="text" value="#FFFFFF"></input>
                 <input onchange="change(this);" type="color" name="color" id="comment1color" class="color" value="#FFFFFF">
             </td>
         </tr>        
@@ -344,7 +348,7 @@
             </td>
         </tr>
             <td>
-                <input type="text"></input>
+                <input type="text" value="#F7F7F8"></input>
                 <input onchange="change(this);" type="color" name="color" id="comment2color" class="color" value="#F7F7F8">
             </td>
         </tr>

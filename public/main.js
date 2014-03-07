@@ -23,6 +23,9 @@ var com = {
 	render: function(callback){
 
 		callback = callback || function(){};
+
+		if (com.page==undefined||com.page==null) com.page=document.title;
+
 		var url = "reddit.com/r/"+com.site+"/comments/"+com.page;		
 	    url = url.replace("http://", "");
 		url = url.substring(url.length-1)=="/"?url.substring(0,url.length-1):url;

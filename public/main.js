@@ -6,6 +6,7 @@ var com = {
 		com.page = params.pageName;
 		com.simple = params.simple;
 		com.type = params.type;
+		com.title = params.title||document.title;
 
         if (params.comment1color != undefined) $('.comColor1').css('background-color', params.comment1color);
         if (params.comment2color != undefined){ $('.comColor2').css('background-color', params.comment2color);}
@@ -24,7 +25,7 @@ var com = {
 
 		callback = callback || function(){};
 
-		if (com.page==undefined||com.page==null) com.page=document.title;
+		if (com.page==undefined||com.page==null||com.page=="") com.page=document.title;
 
 		var url = "reddit.com/r/"+com.site+"/comments/"+com.page;		
 	    url = url.replace("http://", "");
@@ -47,8 +48,17 @@ var com = {
 	},
 
 	start: function(url, call){
-		$.get("./get/?url="+url + "/.json", function(data){
+		var location = window.location.href;
+		location = location.substring(location.indexOf("//")+2)
+		location = "http://shidel.com";
+		$.get("./get/?url="+url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
 			com.view.innerHMTL = "";
+
+			console.log(data);
+			if (data=="Creating"){
+				call();
+				return;
+			}
 			//com.innerHTML += "<p>" + data + "</p>";			
 			if (typeof JSON == "undefined"){
 				com.loadScript("./json.js", function(){

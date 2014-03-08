@@ -227,7 +227,7 @@ function getModHash(user, pass, callback){
     console.log("getModHash called");
     //$.ajax({type:"GET", url:"https://ssl.reddit.com/api/me.json", success:function(d){console.log(d.data.modhash)}});
     console.log("./post/?method=login&json="+JSON.stringify({passwd:pass,user:user,api_type:'json'}))
-    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({passwd:pass,rem:true,user:user,api_type:'json'}), success:function(d){d=JSON.parse(d); console.log(d); callback(d["json"]["data"]["modhash"], d["json"]["data"]["cookie"]);}});
+    $.ajax({type:"GET", url:"http://localhost:3000/post/?method=login&json="+JSON.stringify({name:$("#siteName").val(),passwd:pass,rem:true,user:user,api_type:'json'}), success:function(d){d=JSON.parse(d); console.log(d); callback(d["json"]["data"]["modhash"], d["json"]["data"]["cookie"]);}});
 }
 
 function login(callback){

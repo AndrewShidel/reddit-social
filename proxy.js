@@ -72,7 +72,7 @@ app.get('/req/', function(req, res) {
 
 app.get('/get/', function(req, res) {
     //A function that takes a url and downloads the source. This will be defined in the next step.
-	var url = "http://" + req.query.url;
+	var url = req.query.url;
 	console.log("Get: " + url);
 	getSource2(url, res, req);
 });
@@ -99,18 +99,33 @@ function isNewSite(user){
     return true;
 }
 
-function getSource2(uri, res, req){
-	request(uri, function(error, response, body) {
-        if (!error && response.statusCode == 200) {
-            if (body.length>150) {
-                res.send(body);
-                return;
-            }
-        }           
-        console.log("error")
-                 
+function getSource2(uri, res, req){   
+    var user = loadUserInfo(req.query.site);
+
+    var usesUri=false;
+    if (uri!="title"){
+        usesUri=true
+        uri="http://"+( uri[uri.length-1]=="/"?uri.substring(0,uri.length-2):uri )+".json";
+    }else{
+        usesUri = false;
+        uri=user.posts[req.query.title]+".json"
+    }
+
+    if (user.posts[req.query.title] != undefined || usesUri){
+    	request(uri, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                if (body.length>150) {
+                    res.send(body);
+                    return;
+                }
+            }           
+                   
+        });
+    }else{
+        console.log("New")
+                     
         var post={
-            user: req.query.site,
+            user: user,
             text: "",
             title: req.query.title,
             url: req.query.origin
@@ -118,13 +133,13 @@ function getSource2(uri, res, req){
         console.log("post: "+JSON.stringify(post));
         createNewPost(post);
         //res.send("Creating");
-        return;                
-    });
+        return;         
+    }
 }
 
 //post: {user: "tannerdaman1", text: "", title: "", url: ""}
 function createNewPost(post){
-    var user = loadUserInfo(post.user);
+    var user = post.user;
     console.log("user: "+JSON.stringify(user));
     login(user, function(modhash, cookie){
         console.log("mod: "+modhash+"  cookie: "+cookie);
@@ -142,7 +157,7 @@ function createNewPost(post){
             api_type: "json",
             extention: "",
             kind: "link",
-            resubmit: false,
+            resubmit: true,
             save: true,
             sendreplies: false,
             sr: user.siteName,
@@ -160,6 +175,8 @@ function createNewPost(post){
           form: data
         }, function(error, response, body) {
           console.log(body);
+          user.posts[post.title]=JSON.parse(body).json.data.url;
+          saveUser(user);
           //res.send(body)
         });
 
@@ -192,8 +209,12 @@ function login(user, callback){
 
 }
 
-function loadUserInfo(user){   
+function loadUserInfo(user){
+
     return JSON.parse(fs.readFileSync("./info/"+user+".json"));
+}
+function saveUser(user){
+    fs.writeFile("./info/"+user.siteName+'.json', JSON.stringify(user), function (err) {});
 }
 
 function getSource(uri, json, res) {

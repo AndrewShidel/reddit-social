@@ -4,9 +4,12 @@ var com = {
 		com.view = document.getElementById(params.view)
 		com.site = params.siteName;
 		com.page = params.pageName;
-		com.simple = params.simple;
+		com.simple = params.simple||true;
 		com.type = params.type;
 		com.title = params.title||document.title;
+
+		//If a url is specified, then use it, else use the page title.
+		com.url=params.url||"title";
 
         if (params.comment1color != undefined) $('.comColor1').css('background-color', params.comment1color);
         if (params.comment2color != undefined){ $('.comColor2').css('background-color', params.comment2color);}
@@ -27,51 +30,57 @@ var com = {
 
 		if (com.page==undefined||com.page==null||com.page=="") com.page=document.title;
 
-		var url = "reddit.com/r/"+com.site+"/comments/"+com.page;		
+		/*var url = "reddit.com/r/"+com.site+"/comments/"+com.page;		
 	    url = url.replace("http://", "");
-		url = url.substring(url.length-1)=="/"?url.substring(0,url.length-1):url;
-		//document.body.innerHTML += "<div id='comments'></div>";
+		url = url.substring(url.length-1)=="/"?url.substring(0,url.length-1):url;*/
 
 		com.loadStyle("./style.css", function (){
 			if (typeof $ == "undefined"){
 				com.loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js", function(){
-					com.start(url, function(){
+					com.start(function(res){						
 						callback();
 					});
 				});
 			}else{
-				com.start(url, function(){
+				com.start(function(res){
 					callback();
 				});
 			}	
 		});
 	},
 
-	start: function(url, call){
+	start: function(call){
 		var location = window.location.href;
 		location = location.substring(location.indexOf("//")+2)
+
+		//Reddit rejects localhost urls, so this will be temporarily used.
 		location = "http://shidel.com";
-		$.get("./get/?url="+url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
+
+		$.get("./get/?url=" + com.url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
 			com.view.innerHMTL = "";
 
 			console.log(data);
 			if (data=="Creating"){
-				call();
+				call("nothing");
+				return;
+			}
+			var obj = JSON.parse(data);
+			if (obj[1].data.children.length==0){
+
+				call("nothing");				
 				return;
 			}
 			//com.innerHTML += "<p>" + data + "</p>";			
 			if (typeof JSON == "undefined"){
-				com.loadScript("./json.js", function(){
-					var obj = JSON.parse(data);
+				com.loadScript("./json.js", function(){					
 					var _comments = obj[1].data.children;
 					com.make(com.view, _comments, 0);
-					call();
+					call("success");
 				})
-			}else{
-				var obj = JSON.parse(data);
+			}else{				
 				var _comments = obj[1].data.children;
 				com.make(com.view, _comments, 0);
-				call();
+				call("success");
 			}
 		});	
 	},

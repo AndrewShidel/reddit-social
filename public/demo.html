@@ -4,7 +4,7 @@
 <script src="./jquery.min.js"></script> 
 <script src="./main.js"></script> 
 <link rel="stylesheet" type="text/css" href="style.css">
-<title>This is a test post.</title>
+<title>This is a test post 2.</title>
 <style>
 /*#comments{
 	position: relative;
@@ -37,6 +37,7 @@
 	position: absolute;
 	left: 10%;
 	top: 200px;
+	display: none;
 }
 
 </style>
@@ -59,11 +60,12 @@
 
 com.create({
 	view: "comments",
-	pageName: "",
+	title: "Test post...",
 	siteName: "thissubisafake3",
-	simple: true
+	url: "www.reddit.com/r/pics/comments/1zz9pg/aquarium_elevator_berlin_germany/"
 });
-
+com.render();
+/*
 com.render(function(){
 	document.getElementById("loading").style.left="60%"
 	com.create({
@@ -72,8 +74,8 @@ com.render(function(){
 		siteName: "pics",
 		simple: false
 	});
-	com.render(function(){document.getElementById("loading").style.display="none";});
-});
+	//com.render(function(){document.getElementById("loading").style.display="none";});
+});*/
 </script>
 
 </body>

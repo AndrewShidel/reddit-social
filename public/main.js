@@ -49,6 +49,19 @@ var com = {
 		});
 	},
 
+	authentcate: function(){
+
+	},
+	makeComment: function(){
+
+	},
+	reply: function(parent){
+
+	}
+	vote: function(up){
+
+	},
+
 	start: function(call){
 		var location = window.location.href;
 		location = location.substring(location.indexOf("//")+2)
@@ -106,6 +119,7 @@ var com = {
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
 	        +com.decodeEntities(data.body_html)
 	        + "</div>"
+	        + "<div class='comFooter'><span>permalink</span><span>source</span><span>save</span><span>report</span><span>give gold</span><span>reply</span><span>hide child comments</span></div>"
 
 	    return comment;
 	},

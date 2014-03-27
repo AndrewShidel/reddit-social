@@ -99,7 +99,8 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquot
 .comFooterItem{
     margin-left: 10px;
     margin-right: 10px;
-    color: #888;
+    color: #888 !important;
+    cursor: pointer;
 }
 .comFooterItem:hover {
     text-decoration: underline;

@@ -15,7 +15,9 @@ app.use(express.static(__dirname + '/public'));
  
 app.get('/post/', function(req, res) {
 	//console.log("URl: "+req.query.method+"\nJSON: "+JSON.parse(req.query.json).user);
-    var json = JSON.parse(req.query.json);
+
+    if (req.query.json != undefined)
+        var json = JSON.parse(req.query.json);
     var request = require("request");
     var header = {
         'User-Agent': 'Reddit-Social-Comments'
@@ -41,6 +43,9 @@ app.get('/post/', function(req, res) {
             fs.writeFile("./info/"+json.name+'.json', JSON.stringify(userObj), function (err) {});
         }
     }
+
+    header = req.query.header || header;
+
 
     request({
       uri: "https://ssl.reddit.com/api/"+req.query.method+"/",

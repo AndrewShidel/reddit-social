@@ -11,7 +11,7 @@
 <span>response_type</span><input class="inputs" type="text" value="code"/><br>
 <span>scope</span><input class="inputs" type="text" value="identity"/><br>
 <span>client_id</span><input class="inputs" type="text" value="aatrT5XMBnbU0Q"/><br>
-<span>redirect_uri</span><input class="inputs" id="redirect" type="text" value="http://shidel.com"/><br>
+<span>redirect_uri</span><input class="inputs" id="redirect" type="text" value="http://shidel.com/redirect.html"/><br>
 
 <input type="button" value="Submit" onclick="request()"/>
 
@@ -48,7 +48,7 @@ window.onload=function(){
 
 		var url = "http://162.243.124.12:3000?" 
 			url += "https://ssl.reddit.com/api/v1/access_token?";
-		 	url += "state="+state;
+		 	url += "state="+window.location.href.substring(window.location.href.indexOf("//")+2);
 		 	url += "scope=identity";
 		 	url += "client_id=aatrT5XMBnbU0Q";
 		 	url += "redirect_uri="+document.getElementById("redirect").value;
@@ -61,7 +61,7 @@ window.onload=function(){
 function request(){
 	var params = document.getElementsByClassName("inputs");
 	var query = "https://ssl.reddit.com/api/v1/authorize?";
-	query+="state="+params[0].value+"&";
+	query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
 	query+="duration="+params[1].value+"&";
 	query+="response_type="+params[2].value+"&";
 	query+="scope="+params[3].value+"&";

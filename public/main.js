@@ -7,6 +7,7 @@ var com = {
 		com.simple = params.simple||true;
 		com.type = params.type;
 		com.title = params.title||document.title;
+		com.rootURL = params.rootURL||"./"
 
 		//If a url is specified, then use it, else use the page title.
 		com.url=params.url||"title";
@@ -50,8 +51,64 @@ var com = {
 	},
 
 	authentcate: function(){
-
+		var params = document.getElementsByClassName("inputs");
+		var query = "https://ssl.reddit.com/api/v1/authorize?";
+		query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
+		query+="duration=permanent&";
+		query+="response_type=code&";
+		query+="scope=identity&";
+		query+="client_id=aatrT5XMBnbU0Q&";
+		query+="redirect_uri=http://shidel.com/redirect.html";
+		console.log(query);
+		var win=window.open(query, '_blank');
+	  	win.focus();	  	
 	},
+	window.onload=function(){
+
+		var QueryString = function () {
+		  // This function is anonymous, is executed immediately and 
+		  // the return value is assigned to QueryString!
+		  var query_string = {};
+		  var query = window.location.search.substring(1);
+		  var vars = query.split("&");
+		  for (var i=0;i<vars.length;i++) {
+		    var pair = vars[i].split("=");
+		    	// If first entry with this name
+		    if (typeof query_string[pair[0]] === "undefined") {
+		      query_string[pair[0]] = pair[1];
+		    	// If second entry with this name
+		    } else if (typeof query_string[pair[0]] === "string") {
+		      var arr = [ query_string[pair[0]], pair[1] ];
+		      query_string[pair[0]] = arr;
+		    	// If third or later entry with this name
+		    } else {
+		      query_string[pair[0]].push(pair[1]);
+		    }
+		  } 
+		    return query_string;
+		} ();
+		debugger;
+		if (QueryString.code != undefined){
+			var json={
+				state: encodeURIComponent(window.location.href),
+				scope: "identity",
+				client_id: "aatrT5XMBnbU0Q",
+			   	redirect_uri: http://shidel.com/redirect.html,
+			   	code: QueryString.code,
+			   	grant_type: 'authorization_code'
+			}
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				username: "aatrT5XMBnbU0Q",
+				password: "uu2YgQZoT6WrOMTrrybtwGwX1VU"
+			};
+			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				debugger;
+				window.tockenData=data;
+				com.view.scrollIntoView( true );
+			});
+		}
+	}
 	makeComment: function(){
 
 	},
@@ -69,7 +126,7 @@ var com = {
 		//Reddit rejects localhost urls, so this will be temporarily used.
 		location = "http://shidel.com";
 
-		$.get("./get/?url=" + com.url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
+		$.get(com.rootURL+"get/?url=" + com.url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
 			com.view.innerHMTL = "";
 
 			console.log(data);
@@ -128,7 +185,7 @@ var com = {
 	    temp.innerHTML= s;
 	    str= temp.textContent || temp.innerText;
 	    temp=null;
-	    str +=  "<div class='comFooter'><a class='comFooterItem'>permalink</a><a class='comFooterItem'>source</a><a class='comFooterItem'>save</a><a class='comFooterItem'>report</a><a class='comFooterItem'>give gold</a><a class='comFooterItem'>reply</a><a class='comFooterItem'>hide child comments</a></div>";
+	    str +=  "<div class='comFooter'><a class='comFooterItem'>permalink</a><a class='comFooterItem'>source</a><a class='comFooterItem'>save</a><a class='comFooterItem'>report</a><a class='comFooterItem'>give gold</a><a class='comFooterItem' onclick=\" com.reply(this); \">reply</a><a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
 	    return str;
 	},
 
@@ -150,12 +207,13 @@ var com = {
 	    }
 	},
 
-
+	
 	hideCommnet: function (e){
 	    var display = "none";
 	    var con = e.parentNode.parentNode;
 	    if (con.getElementsByClassName("md")[0].style.display == "none") display = "block"
 	    con.getElementsByClassName("md")[0].style.display = display;
+		con.getElementsByClassName("comFooter")[0].style.display = display;
 	    var subs = [];
 
 	    if (!com.simple)

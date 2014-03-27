@@ -128,7 +128,7 @@ var com = {
 	    temp.innerHTML= s;
 	    str= temp.textContent || temp.innerText;
 	    temp=null;
-	    str +=  "<div class='comFooter'><span>permalink</span><span>source</span><span>save</span><span>report</span><span>give gold</span><span>reply</span><span>hide child comments</span></div>";
+	    str +=  "<div class='comFooter'><a class='comFooterItem'>permalink</a><a class='comFooterItem'>source</a><a class='comFooterItem'>save</a><a class='comFooterItem'>report</a><a class='comFooterItem'>give gold</a><a class='comFooterItem'>reply</a><a class='comFooterItem'>hide child comments</a></div>";
 	    return str;
 	},
 

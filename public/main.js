@@ -57,7 +57,7 @@ var com = {
 	},
 	reply: function(parent){
 
-	}
+	},
 	vote: function(up){
 
 	},

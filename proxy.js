@@ -18,6 +18,10 @@ app.get('/post/', function(req, res) {
 
     if (req.query.json != undefined)
         var json = JSON.parse(req.query.json);
+    var type = req.query.oauth=="true"?"oauth":"ssl";
+
+    console.log("\nThe type is "+type+".\n")
+
     var request = require("request");
     var header = {
         'User-Agent': 'Reddit-Social-Comments'
@@ -43,12 +47,15 @@ app.get('/post/', function(req, res) {
             fs.writeFile("./info/"+json.name+'.json', JSON.stringify(userObj), function (err) {});
         }
     }
+    if (req.query.header!=undefined)
+        header = JSON.parse(req.query.header);
 
-    header = req.query.header || header;
-
+    console.log("\n");
+    console.log("uri: "+"https://"+type+".reddit.com/api/"+req.query.method+"/\nheaders: "+JSON.stringify(header)+"\nform: "+JSON.stringify(json));
+    console.log("\n");
 
     request({
-      uri: "https://ssl.reddit.com/api/"+req.query.method+"/",
+      uri: "https://"+type+".reddit.com/api/"+req.query.method+"/",
       method: "POST",
       headers: header,
       form: json

@@ -64,7 +64,6 @@ var com = {
 	  	win.focus();	  	
 	},
 	onLoad: function(){
-
 		var QueryString = function () {
 		  // This function is anonymous, is executed immediately and 
 		  // the return value is assigned to QueryString!
@@ -87,7 +86,6 @@ var com = {
 		  } 
 		    return query_string;
 		} ();
-		debugger;
 		if (QueryString.code != undefined){
 			var json={
 				state: encodeURIComponent(window.location.href),
@@ -99,20 +97,53 @@ var com = {
 			}
 			var header = {
 				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
-				username: "aatrT5XMBnbU0Q",
-				password: "uu2YgQZoT6WrOMTrrybtwGwX1VU"
+				'Authorization':'Basic '+btoa("aatrT5XMBnbU0Q:uu2YgQZoT6WrOMTrrybtwGwX1VU")
 			};
+			window.theURL=com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header);
+			console.log(window.theURL);
 			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				window.tockenData=data;
+				window.tokenData=JSON.parse(data).access_token;
 				com.view.scrollIntoView( true );
 			});
 		}
 	},
-	makeComment: function(){
-
+	sendComment: function(text, id){
+		if (window.tokenData!=undefined){
+			var json={
+				api_type:"json",
+				text:"Test comment",
+				thing_id:id,
+				'Authorization':'bearer '+window.tokenData
+			};
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'bearer '+window.tokenData
+			}; 
+			$.get( com.rootURL+"post/?method=comment&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				console.log(data);
+				com.view.scrollIntoView( true );
+			});		
+		}else{
+			com.authentcate();
+		}
 	},
 	reply: function(parent){
+		var text=parent.getElementsByTagName("textarea")[0].value,
+			id=parent.getAttribute("name");
+		com.sendComment(text, id);
+	},
+	replyButton: function(ele){
 
+		var parent = ele.parentNode.parentNode;
+		if (window.clickedOnce){
+			parent.getElementsByClassName("comReply")[0].innerHTML="";
+			window.clickedOnce=false;
+			return;
+		}
+		var txt="<textarea style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button>cancel</button>"
+
+  		parent.getElementsByClassName("comReply")[0].innerHTML=txt
+  		window.clickedOnce=true;
 	},
 	vote: function(up){
 
@@ -134,6 +165,7 @@ var com = {
 				return;
 			}
 			var obj = JSON.parse(data);
+			window.mainID=obj[0].data.children[0].data.id;
 			if (obj[1].data.children.length==0){
 
 				call("nothing");				
@@ -166,11 +198,11 @@ var com = {
 		}
 	},
 
-	makeComment: function(level, i, data){		
+	makeComment: function(level, i, data){
 		var _class = com.simple?"commentSimple ":"comment " 
 		if (com.simple) _class += level%2==0?"comColor1":"comColor2";
 	    var id = "parent"+com.viewID+"comLevel"+level+"num"+i
-	    var comment = "<div class='"+_class+"' id="+id+">" 
+	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.id+"'>" 
 	        +"<div class='updown'><div class='up'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div class='down'></div></div>"
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
 	        +com.decodeEntities(data.body_html)
@@ -184,7 +216,8 @@ var com = {
 	    temp.innerHTML= s;
 	    str= temp.textContent || temp.innerText;
 	    temp=null;
-	    str +=  "<div class='comFooter'><a class='comFooterItem'>permalink</a><a class='comFooterItem'>source</a><a class='comFooterItem'>save</a><a class='comFooterItem'>report</a><a class='comFooterItem'>give gold</a><a class='comFooterItem' onclick=\" com.reply(this); \">reply</a><a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
+	    str += "<div class='comReply'></div>"
+	    str +=  "<div class='comFooter'><a class='comFooterItem'>permalink</a><a class='comFooterItem'>source</a><a class='comFooterItem'>save</a><a class='comFooterItem'>report</a><a class='comFooterItem'>give gold</a><a class='comFooterItem' onclick=\" com.replyButton(this); \">reply</a><a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
 	    return str;
 	},
 

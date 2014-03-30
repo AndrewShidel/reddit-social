@@ -63,7 +63,7 @@ var com = {
 		var win=window.open(query, '_blank');
 	  	win.focus();	  	
 	},
-	window.onload=function(){
+	onLoad: function(){
 
 		var QueryString = function () {
 		  // This function is anonymous, is executed immediately and 
@@ -93,7 +93,7 @@ var com = {
 				state: encodeURIComponent(window.location.href),
 				scope: "identity",
 				client_id: "aatrT5XMBnbU0Q",
-			   	redirect_uri: http://shidel.com/redirect.html,
+			   	redirect_uri: "http://shidel.com/redirect.html",
 			   	code: QueryString.code,
 			   	grant_type: 'authorization_code'
 			}
@@ -103,12 +103,11 @@ var com = {
 				password: "uu2YgQZoT6WrOMTrrybtwGwX1VU"
 			};
 			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				debugger;
 				window.tockenData=data;
 				com.view.scrollIntoView( true );
 			});
 		}
-	}
+	},
 	makeComment: function(){
 
 	},
@@ -267,3 +266,5 @@ var com = {
 	}
 
 }
+
+window.onload=com.onLoad;

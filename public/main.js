@@ -18,6 +18,7 @@ var com = {
 			var msg="LOADING COMMENTS...";
 			
 			com.view.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+"</h3><img style='height:25px;width:25px;position:relative;top:5px;' src='http://www.paynearme.com/assets/loading-6850ea7c280eb89c1510fa438a8bf9c1.gif'></img></div>";
+			com.header=com.view.getElementsByClassName("comHeader")[0];
 		}, 0);
 
 		//If a url is specified, then use it, else use the page title.
@@ -151,8 +152,11 @@ var com = {
 			window.clickedOnce=false;
 			return;
 		}
-		var txt="<textarea style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button>cancel</button>"
-
+		var txt="<textarea class='reply' style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button>cancel</button>"
+		if (ele.tagName.toLowerCase()=="a"){
+			parent.innerHTML+=txt;
+			return;
+		}
   		parent.getElementsByClassName("comReply")[0].innerHTML=txt
   		window.clickedOnce=true;
 	},
@@ -200,7 +204,7 @@ var com = {
 	make: function(parent, comments,level){
 		if (level==0){
 			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
-			parent.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <a class='addCommentLink'>ADD YOURS</a></h3></div>"//+parent.innerHTML;
+			parent.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this)'>ADD YOURS</a></span></h3></div>"//+parent.innerHTML;
 		}
 
 		for (var i = 0; i < comments.length; i++){

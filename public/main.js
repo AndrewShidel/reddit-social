@@ -1,5 +1,8 @@
 var com = {
-	create: function(params){		
+	create: function(params){	
+
+		
+
 		com.viewID = params.view
 		com.view = document.getElementById(params.view)
 		com.site = params.siteName;
@@ -8,6 +11,14 @@ var com = {
 		com.type = params.type;
 		com.title = params.title||document.title;
 		com.rootURL = params.rootURL||"./"
+
+		setTimeout(function(){
+			console.log("Called!!!");
+			//var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
+			var msg="LOADING COMMENTS...";
+			
+			com.view.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+"</h3><img style='height:25px;width:25px;position:relative;top:5px;' src='http://www.paynearme.com/assets/loading-6850ea7c280eb89c1510fa438a8bf9c1.gif'></img></div>";
+		}, 0);
 
 		//If a url is specified, then use it, else use the page title.
 		com.url=params.url||"title";
@@ -159,7 +170,6 @@ var com = {
 		$.get(com.rootURL+"get/?url=" + com.url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
 			com.view.innerHMTL = "";
 
-			console.log(data);
 			if (data=="Creating"){
 				call("nothing");
 				return;
@@ -190,8 +200,9 @@ var com = {
 	make: function(parent, comments,level){
 		if (level==0){
 			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
-			parent.innerHTML+="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <a class='addCommentLink'>ADD YOURS</a></h3></div>"
+			parent.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <a class='addCommentLink'>ADD YOURS</a></h3></div>"//+parent.innerHTML;
 		}
+
 		for (var i = 0; i < comments.length; i++){
 			if (comments[i].data.body_html!=undefined) parent.innerHTML += com.makeComment(level, i, comments[i].data)
 	        else continue;

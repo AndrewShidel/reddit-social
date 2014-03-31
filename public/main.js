@@ -171,6 +171,7 @@ var com = {
 				call("nothing");				
 				return;
 			}
+			window.numComments=obj[0].data.children[0].data.num_comments;
 			//com.innerHTML += "<p>" + data + "</p>";			
 			if (typeof JSON == "undefined"){
 				com.loadScript("./json.js", function(){					
@@ -187,6 +188,10 @@ var com = {
 	},
 
 	make: function(parent, comments,level){
+		if (level==0){
+			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
+			parent.innerHTML+="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <a class='addCommentLink'>ADD YOURS</a></h3></div>"
+		}
 		for (var i = 0; i < comments.length; i++){
 			if (comments[i].data.body_html!=undefined) parent.innerHTML += com.makeComment(level, i, comments[i].data)
 	        else continue;
@@ -195,6 +200,9 @@ var com = {
 					com.make(document.getElementById("parent"+com.viewID+"comLevel"+level+"num"+i), comments[i].data.replies.data.children, level+1);
 				}
 			}catch(e){}
+		}
+		if (level==0) {
+			//parent.innerHTML += "<div style='width:1px;height:1px; overflow:visible;'><textarea class='comBoxMain'></textarea></div>"
 		}
 	},
 

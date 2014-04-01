@@ -144,6 +144,9 @@ var com = {
 			id=parent.getAttribute("name");
 		com.sendComment(text, id);
 	},
+	removeBox: function(ele){
+		ele.parentNode.removeChild(ele.parentNode.getElementsByClassName("comReply")[0]);		
+	},
 	replyButton: function(ele){
 
 		var parent = ele.parentNode.parentNode;
@@ -152,11 +155,12 @@ var com = {
 			window.clickedOnce=false;
 			return;
 		}
-		var txt="<textarea class='reply' style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button>cancel</button>"
-		if (ele.tagName.toLowerCase()=="a"){
-			parent.innerHTML+=txt;
+		var txt="<textarea style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button onclick='com.replyButton(this.parentNode)'>cancel</button>"
+		/*if (ele.parentNode.tagName.toLowerCase()=="span"){
+			if (parent.getElementsByClassName("comReply").length==0)
+				parent.innerHTML+=txt;
 			return;
-		}
+		}*/
   		parent.getElementsByClassName("comReply")[0].innerHTML=txt
   		window.clickedOnce=true;
 	},
@@ -204,7 +208,7 @@ var com = {
 	make: function(parent, comments,level){
 		if (level==0){
 			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
-			parent.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this)'>ADD YOURS</a></span></h3></div>"//+parent.innerHTML;
+			parent.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this.parentNode)'>ADD YOURS</a></span></h3><div class='comReply'></div></div>"//+parent.innerHTML;
 		}
 
 		for (var i = 0; i < comments.length; i++){

@@ -60,7 +60,6 @@ app.get('/post/', function(req, res) {
       headers: header,
       form: json
     }, function(error, response, body) {
-      console.log(body);
       res.send(body)
     });
 });

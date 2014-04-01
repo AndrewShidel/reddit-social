@@ -68,12 +68,13 @@ var com = {
 		query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
 		query+="duration=permanent&";
 		query+="response_type=code&";
-		query+="scope=identity&";
+		query+="scope=identity,edit,read,save,submit,vote&";
 		query+="client_id=aatrT5XMBnbU0Q&";
 		query+="redirect_uri=http://shidel.com/redirect.html";
 		console.log(query);
 		var win=window.open(query, '_blank');
-	  	win.focus();	  	
+	  	win.focus();
+	  	//window.location.href=query	  	
 	},
 	onLoad: function(){
 		var QueryString = function () {
@@ -101,7 +102,7 @@ var com = {
 		if (QueryString.code != undefined){
 			var json={
 				state: encodeURIComponent(window.location.href),
-				scope: "identity",
+				scope: "identity,edit,read,save,submit,vote",
 				client_id: "aatrT5XMBnbU0Q",
 			   	redirect_uri: "http://shidel.com/redirect.html",
 			   	code: QueryString.code,
@@ -121,15 +122,16 @@ var com = {
 	},
 	sendComment: function(text, id){
 		if (window.tokenData!=undefined){
+			console.log("This id "+id);
 			var json={
 				api_type:"json",
-				text:"Test comment",
+				text:text,
 				thing_id:id,
-				'Authorization':'bearer '+window.tokenData
+				'Authorization':'Bearer '+window.tokenData
 			};
 			var header = {
 				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
-				'Authorization':'bearer '+window.tokenData
+				'Authorization':'Bearer '+window.tokenData
 			}; 
 			$.get( com.rootURL+"post/?method=comment&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
 				console.log(data);
@@ -140,6 +142,7 @@ var com = {
 		}
 	},
 	reply: function(parent){
+		parent=parent.parentNode;
 		var text=parent.getElementsByTagName("textarea")[0].value,
 			id=parent.getAttribute("name");
 		com.sendComment(text, id);
@@ -229,7 +232,8 @@ var com = {
 		var _class = com.simple?"commentSimple ":"comment " 
 		if (com.simple) _class += level%2==0?"comColor1":"comColor2";
 	    var id = "parent"+com.viewID+"comLevel"+level+"num"+i
-	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.id+"'>" 
+	    console.log(data);
+	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.name+"'>" 
 	        +"<div class='updown'><div class='up'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div class='down'></div></div>"
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
 	        +com.decodeEntities(data.body_html)
@@ -326,5 +330,5 @@ var com = {
 	}
 
 }
-
-window.onload=com.onLoad;
+window.addEventListener("load", com.onLoad, false);
+//window.onload=com.onLoad;

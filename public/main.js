@@ -62,7 +62,8 @@ var com = {
 		});
 	},
 
-	authentcate: function(){
+	authentcate: function(toDo){
+		toDo=toDo||"";
 		var params = document.getElementsByClassName("inputs");
 		var query = "https://ssl.reddit.com/api/v1/authorize?";
 		query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
@@ -72,8 +73,19 @@ var com = {
 		query+="client_id=aatrT5XMBnbU0Q&";
 		query+="redirect_uri=http://shidel.com/redirect.html";
 		console.log(query);
-		var win=window.open(query, '_blank');
-	  	win.focus();
+		window.otherWindow=window.open(query, '_blank');
+	  	window.otherWindow.focus();
+
+	  	window.tempCookie="waiting"
+	  	document.cookie=window.tempCookie;
+	  	window.cookieInterval=setInterval(function(){
+	  		if(document.cookie!=window.tempCookie){	  			
+	  			window.tokenData=document.cookie;	  			
+	  			//window.otherWindow.close();
+	  			clearInterval(window.cookieInterval);
+	  			eval(toDo);
+	  		}
+	  	},500);
 	  	//window.location.href=query	  	
 	},
 	onLoad: function(){
@@ -116,6 +128,9 @@ var com = {
 			console.log(window.theURL);
 			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
 				window.tokenData=JSON.parse(data).access_token;
+				document.cookie=window.tokenData;
+				close();
+				//eval(QueryString.toDo);
 				com.view.scrollIntoView( true );
 			});
 		}
@@ -135,10 +150,12 @@ var com = {
 			}; 
 			$.get( com.rootURL+"post/?method=comment&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
 				console.log(data);
+				document.body.innerHTML+="<div class='comError'>COMMENT CREATED</div>";
+				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
 				com.view.scrollIntoView( true );
 			});		
 		}else{
-			com.authentcate();
+			com.authentcate("com.sendComment('"+text+"','"+id+"')");
 		}
 	},
 	reply: function(parent){

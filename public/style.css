@@ -146,6 +146,17 @@ a.addCommentLink:hover,a.addCommentLink:active{
     text-decoration: underline;
 }
 
+.comError{
+    position: fixed;
+    z-index: 100000;
+    width: 20%;
+    left: 40%;
+    background-color: #AAA;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
 .comAuthor{
     font-weight: bold;
 }

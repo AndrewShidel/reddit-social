@@ -152,6 +152,7 @@ var com = {
 				console.log(data);
 				document.body.innerHTML+="<div class='comError'>COMMENT CREATED</div>";
 				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
+				com.render();
 				com.view.scrollIntoView( true );
 			});		
 		}else{

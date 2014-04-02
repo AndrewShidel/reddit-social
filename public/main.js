@@ -185,8 +185,32 @@ var com = {
   		parent.getElementsByClassName("comReply")[0].innerHTML=txt
   		window.clickedOnce=true;
 	},
-	vote: function(up){
+	vote:function(ele){
+		com._vote(ele.parentNode.parentNode.getAttribute("name"),ele.getAttribute("class")=="comUp"?1:-1);
+	},
+	_vote: function(thingID,dir){
+		if (window.tokenData!=undefined){
+			var thing=thingID,
+				direction=dir;
 
+			var json={
+					dir:direction,
+					id:thing,
+					'Authorization':'Bearer '+window.tokenData
+			};
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'Bearer '+window.tokenData
+			}; 
+
+			$.get( com.rootURL+"post/?method=vote&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				console.log(data);
+				document.body.innerHTML+="<div class='comError'>VOTE CAST</div>";
+				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
+			});		
+		}else{
+			com.authentcate("com._vote('"+thingID+"',"+dir+")");
+		}
 	},
 
 	start: function(call){
@@ -206,7 +230,6 @@ var com = {
 			var obj = JSON.parse(data);
 			window.mainID=obj[0].data.children[0].data.id;
 			if (obj[1].data.children.length==0){
-
 				call("nothing");				
 				return;
 			}
@@ -252,7 +275,7 @@ var com = {
 	    var id = "parent"+com.viewID+"comLevel"+level+"num"+i
 	    console.log(data);
 	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.name+"'>" 
-	        +"<div class='updown'><div class='up'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div class='down'></div></div>"
+	        +"<div class='updown'><div onclick='com.vote(this)' class='comUp'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div onclick='com.vote(this)' class='comDown'></div></div>"
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
 	        +com.decodeEntities(data.body_html)
 	        + "</div>"

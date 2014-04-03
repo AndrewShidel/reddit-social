@@ -24,17 +24,32 @@ var com = {
 		//If a url is specified, then use it, else use the page title.
 		com.url=params.url||"title";
 
-        if (params.comment1color != undefined) $('.comColor1').css('background-color', params.comment1color);
-        if (params.comment2color != undefined){ $('.comColor2').css('background-color', params.comment2color);}
-        if (params.fontFamily != undefined) $(".comments").css("font-family", params.fontFamily);
-        if (params.fontSize!= undefined) $(".comments").css("font-size", params.fontSize+"pt");
-        if (params.fontColor!= undefined) $(".comments").css("color", params.fontColor);
+		com.setStyles(params)	    
+	},
 
-        if (params.borderRadius!= undefined) $(".commentSimple").css("border-radius", params.borderRadius);
-        if (params.borderStyle!= undefined) $(".commentSimple").css("border-style", params.borderStyle);
-        if (params.borderColor!= undefined) $(".commentSimple").css("border-color", params.borderColor);
-        if (params.borderSize!= undefined) $(".commentSimple").css("border-width", params.borderSize);
-
+	setStyles:function(params){
+		var keys={
+			comment1color:['.comColor1','background-color'],
+			comment2color:['.comColor2','background-color'],
+			fontFamily:['.comments','font-family'],
+			fontSize:['.comments','font-size'],
+			fontColor:['.comments','color'],
+			borderRadius:['.commentSimple','border-radius'],
+			borderStyle:['.commentSimple','border-style'],
+			borderColor:['.commentSimple','border-color'],
+			borderSize:['.commentSimple','border-width'],
+			headerColor:['.comHeader','background-color'],
+			headerFontColor:['.comHeader','color'],
+			headerFontSize:['.comHeader','font-size'],
+			headerFontFamily:['.comHeader','font-family']			
+		}
+		var props=Object.keys(params),
+			key, prop;
+		for (var i=0;i<props.length,prop=props[i];i++){
+			key=keys[prop];
+			if (typeof key != 'undefined')
+				$(key[0]).css(key[1], prop);
+		}
 	},
 
 	render: function(callback){
@@ -204,7 +219,7 @@ var com = {
 			}; 
 
 			$.get( com.rootURL+"post/?method=vote&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				console.log(data);
+				console.log(data);				
 				document.body.innerHTML+="<div class='comError'>VOTE CAST</div>";
 				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
 			});		

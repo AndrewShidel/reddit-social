@@ -14,7 +14,7 @@ var com = {
 
 		setTimeout(function(){
 			console.log("Called!!!");
-			//var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
+
 			var msg="LOADING COMMENTS...";
 			
 			com.view.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+"</h3><img style='height:25px;width:25px;position:relative;top:5px;' src='http://www.paynearme.com/assets/loading-6850ea7c280eb89c1510fa438a8bf9c1.gif'></img></div>";
@@ -58,10 +58,6 @@ var com = {
 
 		if (com.page==undefined||com.page==null||com.page=="") com.page=document.title;
 
-		/*var url = "reddit.com/r/"+com.site+"/comments/"+com.page;		
-	    url = url.replace("http://", "");
-		url = url.substring(url.length-1)=="/"?url.substring(0,url.length-1):url;*/
-
 		com.loadStyle("./style.css", function (){
 			if (typeof $ == "undefined"){
 				com.loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js", function(){
@@ -95,13 +91,11 @@ var com = {
 	  	document.cookie=window.tempCookie;
 	  	window.cookieInterval=setInterval(function(){
 	  		if(document.cookie!=window.tempCookie){	  			
-	  			window.tokenData=document.cookie;	  			
-	  			//window.otherWindow.close();
+	  			window.tokenData=document.cookie;	  	
 	  			clearInterval(window.cookieInterval);
 	  			eval(toDo);
 	  		}
 	  	},500);
-	  	//window.location.href=query	  	
 	},
 	onLoad: function(){
 		var QueryString = function () {

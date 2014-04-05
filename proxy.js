@@ -14,8 +14,6 @@ console.log('Listening on port 3000');
 app.use(express.static(__dirname + '/public'));
  
 app.get('/post/', function(req, res) {
-	//console.log("URl: "+req.query.method+"\nJSON: "+JSON.parse(req.query.json).user);
-
     if (req.query.json != undefined)
         var json = JSON.parse(req.query.json);
     var type = req.query.oauth=="true"?"oauth":"ssl";
@@ -143,12 +141,10 @@ function getSource2(uri, res, req){
         }
         console.log("post: "+JSON.stringify(post));
         createNewPost(post);
-        //res.send("Creating");
         return;         
     }
 }
 
-//post: {user: "tannerdaman1", text: "", title: "", url: ""}
 function createNewPost(post){
     var user = post.user;
     console.log("user: "+JSON.stringify(user));
@@ -188,12 +184,8 @@ function createNewPost(post){
           console.log(body);
           user.posts[post.title]=JSON.parse(body).json.data.url;
           saveUser(user);
-          //res.send(body)
         });
-
-    });
-
-    
+    });    
 }
 
 function login(user, callback){
@@ -229,7 +221,6 @@ function saveUser(user){
 }
 
 function getSource(uri, json, res) {
-	//uri = decodeURIComponent(uri);
     //Get the source of the url.
     request.post(uri, json, function(error, response, body) {
         if (!error && response.statusCode == 200) {

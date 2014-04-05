@@ -238,6 +238,7 @@ var com = {
 			}
 			var obj = JSON.parse(data);
 			window.mainID=obj[0].data.children[0].data.id;
+			com.header.setAttribute("name",obj[0].data.children[0].data.name)
 			if (obj[1].data.children.length==0){
 				call("nothing");				
 				return;
@@ -260,8 +261,8 @@ var com = {
 
 	make: function(parent, comments,level){
 		if (level==0){
-			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
-			parent.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this.parentNode)'>ADD YOURS</a></span></h3><div class='comReply'></div></div>"//+parent.innerHTML;
+			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");			
+			parent.innerHTML="<div class='comHeader' name='"+com.header.getAttribute('name')+"''><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this.parentNode)'>ADD YOURS</a></span></h3><div class='comReply'></div></div>"//+parent.innerHTML;
 		}
 
 		for (var i = 0; i < comments.length; i++){

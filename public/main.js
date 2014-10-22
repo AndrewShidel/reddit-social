@@ -229,7 +229,7 @@ var com = {
 		//Reddit rejects localhost urls, so this will be temporarily used.
 		location = "http://shidel.com";
 
-		$.get(com.rootURL+"get/?url=" + com.url + "/.json&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
+		$.get(com.rootURL+"get/?url=" + com.url + "/&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
 			com.view.innerHMTL = "";
 
 			if (data=="Creating"){

@@ -6,13 +6,13 @@ var express = require('express'),
     https = require('https'),
     sjcl = require("./public/sjcl.js")
 
-var key = "SECRET KEY THAT IS DIFFERENT IN PRODUCTION CODE"	
+var key = "SECRET KEY THAT IS DIFFERENT IN PRODUCTION CODE"
 
 app.listen(3000);
 console.log('Listening on port 3000');
 
 app.use(express.static(__dirname + '/public'));
- 
+
 app.get('/post/', function(req, res) {
     if (req.query.json != undefined)
         var json = JSON.parse(req.query.json);
@@ -58,7 +58,11 @@ app.get('/post/', function(req, res) {
       headers: header,
       form: json
     }, function(error, response, body) {
-      res.send(body)
+        if (error){
+            res.status(400).send(error)
+            return;
+        }
+        res.send(JSON.stringify(body)+"\n\n"+JSON.stringify(response))
     });
 });
 
@@ -108,7 +112,7 @@ function isNewSite(user){
     return true;
 }
 
-function getSource2(uri, res, req){   
+function getSource2(uri, res, req){
     var user = loadUserInfo(req.query.site);
 
     var usesUri=false;
@@ -127,12 +131,12 @@ function getSource2(uri, res, req){
                     res.send(body);
                     return;
                 }
-            }           
-                   
+            }
+
         });
     }else{
         console.log("New")
-                     
+
         var post={
             user: user,
             text: "",
@@ -141,7 +145,7 @@ function getSource2(uri, res, req){
         }
         console.log("post: "+JSON.stringify(post));
         createNewPost(post);
-        return;         
+        return;
     }
 }
 
@@ -158,7 +162,7 @@ function createNewPost(post){
             'Cookie': "reddit_session="+cookie,
             'X-Modhash': modhash
         }
-        console.log("Headers: " + JSON.stringify(header));        
+        console.log("Headers: " + JSON.stringify(header));
 
         var data = {
             api_type: "json",
@@ -185,7 +189,7 @@ function createNewPost(post){
           user.posts[post.title]=JSON.parse(body).json.data.url;
           saveUser(user);
         });
-    });    
+    });
 }
 
 function login(user, callback){
@@ -205,8 +209,8 @@ function login(user, callback){
       headers: header,
       form: json
     }, function(error, response, body) {
-        console.log("body: "+body); 
-        body=JSON.parse(body);         
+        console.log("body: "+body);
+        body=JSON.parse(body);
         callback(body["json"]["data"]["modhash"], body["json"]["data"]["cookie"]);
     });
 
@@ -224,7 +228,7 @@ function getSource(uri, json, res) {
     //Get the source of the url.
     request.post(uri, json, function(error, response, body) {
         if (!error && response.statusCode == 200) {
-            res.send(body);                
+            res.send(body);
         }else{
             res.send("An error Has occured, the url was most likly incorrect.");
         }

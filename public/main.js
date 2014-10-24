@@ -1,8 +1,5 @@
 var com = {
-	create: function(params){	
-
-		
-
+	create: function(params){
 		com.viewID = params.view
 		com.view = document.getElementById(params.view)
 		com.site = params.siteName;
@@ -16,7 +13,7 @@ var com = {
 			console.log("Called!!!");
 
 			var msg="LOADING COMMENTS...";
-			
+
 			com.view.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+"</h3><img style='height:25px;width:25px;position:relative;top:5px;' src='http://www.paynearme.com/assets/loading-6850ea7c280eb89c1510fa438a8bf9c1.gif'></img></div>";
 			com.header=com.view.getElementsByClassName("comHeader")[0];
 		}, 0);
@@ -24,7 +21,7 @@ var com = {
 		//If a url is specified, then use it, else use the page title.
 		com.url=params.url||"title";
 
-		com.setStyles(params)	    
+		com.setStyles(params)
 	},
 
 	setStyles:function(params){
@@ -41,7 +38,7 @@ var com = {
 			headerColor:['.comHeader','background-color'],
 			headerFontColor:['.comHeader','color'],
 			headerFontSize:['.comHeader','font-size'],
-			headerFontFamily:['.comHeader','font-family']			
+			headerFontFamily:['.comHeader','font-family']
 		}
 		var props=Object.keys(params),
 			key, prop;
@@ -61,7 +58,7 @@ var com = {
 		com.loadStyle("./style.css", function (){
 			if (typeof $ == "undefined"){
 				com.loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js", function(){
-					com.start(function(res){						
+					com.start(function(res){
 						callback();
 					});
 				});
@@ -69,11 +66,16 @@ var com = {
 				com.start(function(res){
 					callback();
 				});
-			}	
+			}
 		});
 	},
 
 	authentcate: function(toDo){
+		if (document.cookie){
+			window.tokenData = document.cookie;
+			eval(toDo)
+			return;
+		}
 		toDo=toDo||"";
 		var params = document.getElementsByClassName("inputs");
 		var query = "https://ssl.reddit.com/api/v1/authorize?";
@@ -90,8 +92,8 @@ var com = {
 	  	window.tempCookie="waiting"
 	  	document.cookie=window.tempCookie;
 	  	window.cookieInterval=setInterval(function(){
-	  		if(document.cookie!=window.tempCookie){	  			
-	  			window.tokenData=document.cookie;	  	
+	  		if(document.cookie!=window.tempCookie){
+	  			window.tokenData=document.cookie;
 	  			clearInterval(window.cookieInterval);
 	  			eval(toDo);
 	  		}
@@ -99,7 +101,7 @@ var com = {
 	},
 	onLoad: function(){
 		var QueryString = function () {
-		  // This function is anonymous, is executed immediately and 
+		  // This function is anonymous, is executed immediately and
 		  // the return value is assigned to QueryString!
 		  var query_string = {};
 		  var query = window.location.search.substring(1);
@@ -117,7 +119,7 @@ var com = {
 		    } else {
 		      query_string[pair[0]].push(pair[1]);
 		    }
-		  } 
+		  }
 		    return query_string;
 		} ();
 		if (QueryString.code != undefined){
@@ -156,14 +158,14 @@ var com = {
 			var header = {
 				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
 				'Authorization':'Bearer '+window.tokenData
-			}; 
+			};
 			$.get( com.rootURL+"post/?method=comment&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
 				console.log(data);
 				document.body.innerHTML+="<div class='comError'>COMMENT CREATED</div>";
 				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
 				com.render();
 				com.view.scrollIntoView( true );
-			});		
+			});
 		}else{
 			com.authentcate("com.sendComment('"+text+"','"+id+"')");
 		}
@@ -175,7 +177,7 @@ var com = {
 		com.sendComment(text, id);
 	},
 	removeBox: function(ele){
-		ele.parentNode.removeChild(ele.parentNode.getElementsByClassName("comReply")[0]);		
+		ele.parentNode.removeChild(ele.parentNode.getElementsByClassName("comReply")[0]);
 	},
 	replyButton: function(ele){
 
@@ -210,13 +212,13 @@ var com = {
 			var header = {
 				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
 				'Authorization':'Bearer '+window.tokenData
-			}; 
+			};
 
 			$.get( com.rootURL+"post/?method=vote&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				console.log(data);				
+				console.log(data);
 				document.body.innerHTML+="<div class='comError'>VOTE CAST</div>";
 				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
-			});		
+			});
 		}else{
 			com.authentcate("com._vote('"+thingID+"',"+dir+")");
 		}
@@ -229,7 +231,7 @@ var com = {
 		//Reddit rejects localhost urls, so this will be temporarily used.
 		location = "http://shidel.com";
 
-		$.get(com.rootURL+"get/?url=" + com.url + "/&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
+		$.get(com.rootURL+"get/?url=" + com.url + "/&origin="+location+"&site="+com.site+"&title="+com.title, function(data){
 			com.view.innerHMTL = "";
 
 			if (data=="Creating"){
@@ -240,28 +242,28 @@ var com = {
 			window.mainID=obj[0].data.children[0].data.id;
 			com.header.setAttribute("name",obj[0].data.children[0].data.name)
 			if (obj[1].data.children.length==0){
-				call("nothing");				
+				call("nothing");
 				return;
 			}
 			window.numComments=obj[0].data.children[0].data.num_comments;
-			//com.innerHTML += "<p>" + data + "</p>";			
+			//com.innerHTML += "<p>" + data + "</p>";
 			if (typeof JSON == "undefined"){
-				com.loadScript("./json.js", function(){					
+				com.loadScript("./json.js", function(){
 					var _comments = obj[1].data.children;
 					com.make(com.view, _comments, 0);
 					call("success");
 				})
-			}else{				
+			}else{
 				var _comments = obj[1].data.children;
 				com.make(com.view, _comments, 0);
 				call("success");
 			}
-		});	
+		});
 	},
 
 	make: function(parent, comments,level){
 		if (level==0){
-			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");			
+			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
 			parent.innerHTML="<div class='comHeader' name='"+com.header.getAttribute('name')+"''><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this.parentNode)'>ADD YOURS</a></span></h3><div class='comReply'></div></div>"//+parent.innerHTML;
 		}
 
@@ -280,26 +282,32 @@ var com = {
 	},
 
 	makeComment: function(level, i, data){
-		var _class = com.simple?"commentSimple ":"comment " 
+		var _class = com.simple?"commentSimple ":"comment "
 		if (com.simple) _class += level%2==0?"comColor1":"comColor2";
 	    var id = "parent"+com.viewID+"comLevel"+level+"num"+i
 	    console.log(data);
-	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.name+"'>" 
+	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.name+"'>"
 	        +"<div class='updown'><div onclick='com.vote(this)' class='comUp'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div onclick='com.vote(this)' class='comDown'></div></div>"
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
-	        +com.decodeEntities(data.body_html)
+	        +com.decodeEntities(data.body_html, data.id)
 	        + "</div>"
-	       
+
 	    return comment;
 	},
 
-	decodeEntities: function (s){
+	decodeEntities: function (s, id){
 	    var str, temp= document.createElement('p');
 	    temp.innerHTML= s;
 	    str= temp.textContent || temp.innerText;
 	    temp=null;
 	    str += "<div class='comReply'></div>"
-	    str +=  "<div class='comFooter'><a class='comFooterItem'>permalink</a><a class='comFooterItem'>source</a><a class='comFooterItem'>save</a><a class='comFooterItem'>report</a><a class='comFooterItem'>give gold</a><a class='comFooterItem' onclick=\" com.replyButton(this); \">reply</a><a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
+	    str +=  "<div class='comFooter'><a class='comFooterItem' onclick='com.permalinkClicked(this, \""+id+"\")'>permalink</a>"
+	    	+"<a class='comFooterItem' onClick='com.sourceClicked(this)'>source</a>"
+	    	+"<a class='comFooterItem' onClick='com.saveClicked(\""+id+"\")'>save</a>"
+	    	+"<a class='comFooterItem' onClick='com.reportClicked(this)'>report</a>"
+	    	+"<a class='comFooterItem' onClick='com.giveGoldClicked(this)'>give gold</a>"
+	    	+"<a class='comFooterItem' onclick=\" com.replyButton(this); \">reply</a>"
+	    	+"<a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
 	    return str;
 	},
 
@@ -320,8 +328,41 @@ var com = {
 	        return Math.floor(diff/2592000)+" year" + (Math.floor(diff/2592000)>1?"s":"") + " ago"
 	    }
 	},
+	permalinkClicked: function(ele, id){
+		com.url += id;
+		com.start(function(res){
+			console.log(res);
+		});
+	},
+	sourceClicked: function(ele){alert("source")},
+	saveClicked: function(ele){alert("save")},
+	saveClicked: function(id){
+		if (window.tokenData!=undefined){
+			var json={
+					category:"",
+					id:id,
+					'Authorization':'Bearer '+window.tokenData
+			};
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'Bearer '+window.tokenData
+			};
 
-	
+			$.get( com.rootURL+"post/?method=save&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				console.log(data);
+				document.body.innerHTML+="<div class='comError'>COMMENT SAVED</div>";
+				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				console.log("error: "+JSON.stringify(textStatus));
+			})
+		}else{
+			com.authentcate("com.saveClicked('"+id+"')");
+		}
+	},
+	reportClicked: function(ele){alert("report")},
+	giveGoldClicked: function(ele){alert("giveGold")},
+
+
 	hideCommnet: function (e){
 	    var display = "none";
 	    var con = e.parentNode.parentNode;

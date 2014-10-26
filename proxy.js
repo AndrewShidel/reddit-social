@@ -62,7 +62,7 @@ app.get('/post/', function(req, res) {
             res.status(400).send(JSON.stringify(body)+"\n\n"+JSON.stringify(response))
             return;
         }
-        res.send(JSON.stringify(body))
+        res.send(body)
     });
 });
 

@@ -48,221 +48,6 @@ var com = {
 				$(key[0]).css(key[1], prop);
 		}
 	},
-
-	render: function(callback){
-
-		callback = callback || function(){};
-
-		if (com.page==undefined||com.page==null||com.page=="") com.page=document.title;
-
-		com.loadStyle("./style.css", function (){
-			if (typeof $ == "undefined"){
-				com.loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js", function(){
-					com.start(function(res){
-						callback();
-					});
-				});
-			}else{
-				com.start(function(res){
-					callback();
-				});
-			}
-		});
-	},
-
-	authentcate: function(toDo, force){
-		toDo=toDo||"";
-		console.log(toDo)
-		force=force||false;
-		if (document.cookie && document.cookie!="waiting" && !force){
-			window.tokenData = document.cookie;
-			eval(toDo)
-			return;
-		}
-		var params = document.getElementsByClassName("inputs");
-		var query = "https://ssl.reddit.com/api/v1/authorize?";
-		query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
-		query+="duration=permanent&";
-		query+="response_type=code&";
-		query+="scope=identity,edit,read,save,submit,vote&";
-		query+="client_id=aatrT5XMBnbU0Q&";
-		query+="redirect_uri=http://shidel.com/redirect.html";
-		console.log(query);
-		window.otherWindow=window.open(query, '_blank');
-	  	window.otherWindow.focus();
-
-	  	window.tempCookie="waiting"
-	  	document.cookie=window.tempCookie;
-	  	window.cookieInterval=setInterval(function(){
-	  		if(document.cookie!=window.tempCookie){
-	  			console.log(document.cookie);
-	  			window.tokenData=document.cookie;
-	  			clearInterval(window.cookieInterval);
-	  			eval(toDo);
-	  		}
-	  	},500);
-	},
-	onLoad: function(){
-		console.log("On load")
-		var QueryString = function () {
-		  // This function is anonymous, is executed immediately and
-		  // the return value is assigned to QueryString!
-		  var query_string = {};
-		  var query = window.location.search.substring(1);
-		  var vars = query.split("&");
-		  for (var i=0;i<vars.length;i++) {
-		    var pair = vars[i].split("=");
-		    	// If first entry with this name
-		    if (typeof query_string[pair[0]] === "undefined") {
-		      query_string[pair[0]] = pair[1];
-		    	// If second entry with this name
-		    } else if (typeof query_string[pair[0]] === "string") {
-		      var arr = [ query_string[pair[0]], pair[1] ];
-		      query_string[pair[0]] = arr;
-		    	// If third or later entry with this name
-		    } else {
-		      query_string[pair[0]].push(pair[1]);
-		    }
-		  }
-		    return query_string;
-		} ();
-		if (QueryString.code != undefined){
-			var json={
-				//state: encodeURIComponent(window.location.href),
-				//scope: "identity,edit,read,save,submit,vote",
-				//client_id: "aatrT5XMBnbU0Q",
-			   	grant_type: 'authorization_code',
-			   	code: QueryString.code,
-			   	redirect_uri: "http://shidel.com/redirect.html"
-			}
-			var header = {
-				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
-				'Authorization':'Basic '+btoa("aatrT5XMBnbU0Q:uu2YgQZoT6WrOMTrrybtwGwX1VU")
-			};
-			window.theURL=com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header);
-			console.log("The URL: "+window.theURL);
-			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				console.log(data)
-				window.tokenData = data.substring(data.indexOf(":")+4,data.indexOf(",")-2)
-				console.log(window.tokenData)
-				if (window.tokenData==undefined){
-					console.log("Token is not defined")
-					return;
-				}
-				document.cookie=window.tokenData;
-				console.log("Authenticated")
-				close();
-				//eval(QueryString.toDo);
-				com.view.scrollIntoView( true );
-			});
-		}
-	},
-	sendComment: function(text, id){
-		if (window.tokenData!=undefined){
-			console.log("This id "+id);
-			var json={
-				api_type:"json",
-				text:text,
-				thing_id:id,
-				'Authorization':'Bearer '+window.tokenData
-			};
-			var header = {
-				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
-				'Authorization':'Bearer '+window.tokenData
-			};
-			$.get( com.rootURL+"post/?method=comment&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				console.log(data);
-				document.body.innerHTML+="<div class='comError'>COMMENT CREATED</div>";
-				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
-				com.render();
-				com.view.scrollIntoView( true );
-			});
-		}else{
-			com.authentcate("com.sendComment('"+text+"','"+id+"')");
-		}
-	},
-	reply: function(parent){
-		parent=parent.parentNode;
-		var text=parent.getElementsByTagName("textarea")[0].value,
-			id=parent.getAttribute("name");
-		com.sendComment(text, id);
-	},
-	removeBox: function(ele){
-		ele.parentNode.removeChild(ele.parentNode.getElementsByClassName("comReply")[0]);
-	},
-	replyButton: function(ele){
-
-		var parent = ele.parentNode.parentNode;
-		if (window.clickedOnce){
-			parent.getElementsByClassName("comReply")[0].innerHTML="";
-			window.clickedOnce=false;
-			return;
-		}
-		var txt="<textarea style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button onclick='com.replyButton(this.parentNode)'>cancel</button>"
-		/*if (ele.parentNode.tagName.toLowerCase()=="span"){
-			if (parent.getElementsByClassName("comReply").length==0)
-				parent.innerHTML+=txt;
-			return;
-		}*/
-  		parent.getElementsByClassName("comReply")[0].innerHTML=txt
-  		window.clickedOnce=true;
-	},
-	vote:function(ele){
-		ele.setAttribute("id", new Date().getTime())
-		com._vote(ele, ele.parentNode.parentNode.getAttribute("name"),ele.getAttribute("class").indexOf("comUp")!=-1?1:-1);
-	},
-	_vote: function(element,thingID,dir){
-		if (window.tokenData!=undefined){
-			dir = com.toggleVote(element, thingID, dir)
-			var thing=thingID,
-				direction=dir;
-
-			var json={
-					dir:direction,
-					id:thing,
-					'Authorization':'Bearer '+window.tokenData
-			};
-			var header = {
-				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
-				'Authorization':'Bearer '+window.tokenData
-			};
-
-			$.get( com.rootURL+"post/?method=vote&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				console.log(data);
-				document.body.innerHTML+="<div class='comError'>VOTE CAST</div>";
-				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
-			});
-		}else{
-			com.authentcate("com._vote(document.getElementById('"+element.getAttribute("id")+"'),'"+thingID+"',"+dir+")");
-		}
-	},
-	toggleVote: function(ele, thingID,dir){
-		console.log(dir)
-		var currentState = ele.getAttribute("name")
-		var comScore = ele.parentNode.getElementsByClassName("comScore")[0]
-		if (dir===1){
-			if (currentState === "active"){
-				ele.style.background = "url(updown.png) 0 0";
-				ele.setAttribute("name", "inactive")
-				dir=-1
-			}else{
-				ele.style.background = "url(updown_red.png) 0 0";
-				ele.setAttribute("name", "active")
-			}
-		}else{
-			if (currentState === "active"){
-				ele.style.background = "url(updown.png) 0 -17px";
-				ele.setAttribute("name", "inactive")
-				dir=1
-			}else{
-				ele.style.background = "url(updown_red.png) 0 -17px";
-				ele.setAttribute("name", "active")
-			}
-		}
-		comScore.innerHTML = parseInt(comScore.innerHTML)+dir;
-		return dir;
-	},
-
 	start: function(call){
 		var location = window.location.href;
 		location = location.substring(location.indexOf("//")+2)
@@ -362,6 +147,239 @@ var com = {
 	    	+"<a class='comFooterItem' onclick=\" com.replyButton(this); \">reply</a>"
 	    	+"<a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
 	    return str;
+	},
+
+	render: function(callback){
+
+		callback = callback || function(){};
+
+		if (com.page==undefined||com.page==null||com.page=="") com.page=document.title;
+
+		com.loadStyle("./style.css", function (){
+			if (typeof $ == "undefined"){
+				com.loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js", function(){
+					com.start(function(res){
+						callback();
+					});
+				});
+			}else{
+				com.start(function(res){
+					callback();
+				});
+			}
+		});
+	},
+
+	authentcate: function(toDo, force){
+		toDo=toDo||"";
+		console.log(toDo)
+		force=force||false;
+		var cookie = com.getCookie();
+		if (cookie!=undefined && !force){
+			window.tokenData = cookie;
+			eval(toDo)
+			return;
+		}
+		var params = document.getElementsByClassName("inputs");
+		var query = "https://ssl.reddit.com/api/v1/authorize?";
+		query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
+		query+="duration=permanent&";
+		query+="response_type=code&";
+		query+="scope=identity,edit,read,save,submit,vote&";
+		query+="client_id=aatrT5XMBnbU0Q&";
+		query+="redirect_uri=http://shidel.com/redirect.html";
+		console.log(query);
+		window.otherWindow=window.open(query, '_blank');
+	  	window.otherWindow.focus();
+
+	  	com.cookieInterval=setInterval(function(){
+	  		console.log("Interval")
+	  		var cookie = com.getCookie();
+	  		if(cookie){
+	  			console.log(cookie);
+	  			window.tokenData=cookie;
+	  			clearInterval(com.cookieInterval);
+	  			eval(toDo);
+	  		}
+	  	},500);
+	},
+	onLoad: function(){
+		console.log("On load")
+		var QueryString = function () {
+		  // This function is anonymous, is executed immediately and
+		  // the return value is assigned to QueryString!
+		  var query_string = {};
+		  var query = window.location.search.substring(1);
+		  var vars = query.split("&");
+		  for (var i=0;i<vars.length;i++) {
+		    var pair = vars[i].split("=");
+		    	// If first entry with this name
+		    if (typeof query_string[pair[0]] === "undefined") {
+		      query_string[pair[0]] = pair[1];
+		    	// If second entry with this name
+		    } else if (typeof query_string[pair[0]] === "string") {
+		      var arr = [ query_string[pair[0]], pair[1] ];
+		      query_string[pair[0]] = arr;
+		    	// If third or later entry with this name
+		    } else {
+		      query_string[pair[0]].push(pair[1]);
+		    }
+		  }
+		    return query_string;
+		} ();
+		if (QueryString.code != undefined){
+			var json={
+				//state: encodeURIComponent(window.location.href),
+				//scope: "identity,edit,read,save,submit,vote",
+				//client_id: "aatrT5XMBnbU0Q",
+			   	grant_type: 'authorization_code',
+			   	code: QueryString.code,
+			   	redirect_uri: "http://shidel.com/redirect.html"
+			}
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'Basic '+btoa("aatrT5XMBnbU0Q:uu2YgQZoT6WrOMTrrybtwGwX1VU")
+			};
+			window.theURL=com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header);
+			console.log("The URL: "+window.theURL);
+			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				console.log(data)
+				data = data.replace(/\\\"/g, "'")
+				data = JSON.parse(data);
+				window.tokenData = data["access_token"];
+				if (window.tokenData==undefined){
+					console.log("Token is not defined")
+					return;
+				}
+				var now = new Date();
+				var time = now.getTime();
+				var expireTime = time + parseInt(data["expires_in"])*1000;
+				alert("Expires in: "+data["expires_in"]);
+				now.setTime(expireTime);
+				com.createCookie(window.tokenData, now);
+
+				close();
+				com.view.scrollIntoView( true );
+			});
+		}
+	},
+	createCookie: function(token, expireDate){
+		document.cookie = "token="+token+";path=/;expires="+expireDate.toGMTString();
+	},
+	getCookie: function(){
+		var entries = document.cookie.split(";");
+		if (entries==undefined) return undefined;
+		for (var i=0; i<entries.length; i++){
+			if (entries[i].indexOf("token")!=-1){
+				return entries[i].substring(entries[i].indexOf('=')+1)
+			}
+		}
+	},
+
+	sendComment: function(text, id){
+		if (window.tokenData!=undefined){
+			console.log("This id "+id);
+			var json={
+				api_type:"json",
+				text:text,
+				thing_id:id,
+				'Authorization':'Bearer '+window.tokenData
+			};
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'Bearer '+window.tokenData
+			};
+			$.get( com.rootURL+"post/?method=comment&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				console.log(data);
+				document.body.innerHTML+="<div class='comError'>COMMENT CREATED</div>";
+				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
+				com.render();
+				com.view.scrollIntoView( true );
+			});
+		}else{
+			com.authentcate("com.sendComment('"+text+"','"+id+"')");
+		}
+	},
+	reply: function(parent){
+		parent=parent.parentNode;
+		var text=parent.getElementsByTagName("textarea")[0].value,
+			id=parent.getAttribute("name");
+		com.sendComment(text, id);
+	},
+	removeBox: function(ele){
+		ele.parentNode.removeChild(ele.parentNode.getElementsByClassName("comReply")[0]);
+	},
+	replyButton: function(ele){
+
+		var parent = ele.parentNode.parentNode;
+		if (window.clickedOnce){
+			parent.getElementsByClassName("comReply")[0].innerHTML="";
+			window.clickedOnce=false;
+			return;
+		}
+		var txt="<textarea style='height: 80px; width: 50%;display: block;'></textarea><button onclick='com.reply(this.parentNode)'>save</button><button onclick='com.replyButton(this.parentNode)'>cancel</button>"
+		/*if (ele.parentNode.tagName.toLowerCase()=="span"){
+			if (parent.getElementsByClassName("comReply").length==0)
+				parent.innerHTML+=txt;
+			return;
+		}*/
+  		parent.getElementsByClassName("comReply")[0].innerHTML=txt
+  		window.clickedOnce=true;
+	},
+	vote:function(ele){
+		ele.setAttribute("id", new Date().getTime())
+		com._vote(ele, ele.parentNode.parentNode.getAttribute("name"),ele.getAttribute("class").indexOf("comUp")!=-1?1:-1);
+	},
+	_vote: function(element,thingID,dir){
+		if (window.tokenData!=undefined){
+			dir = com.toggleVote(element, thingID, dir)
+			var thing=thingID,
+				direction=dir;
+
+			var json={
+					dir:direction,
+					id:thing,
+					'Authorization':'Bearer '+window.tokenData
+			};
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'Bearer '+window.tokenData
+			};
+
+			$.get( com.rootURL+"post/?method=vote&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				console.log(data);
+				document.body.innerHTML+="<div class='comError'>VOTE CAST</div>";
+				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
+			});
+		}else{
+			com.authentcate("com._vote(document.getElementById('"+element.getAttribute("id")+"'),'"+thingID+"',"+dir+")");
+		}
+	},
+	toggleVote: function(ele, thingID,dir){
+		console.log(dir)
+		var currentState = ele.getAttribute("name")
+		if (dir===1){
+			if (currentState === "active"){
+				ele.style.background = "url(updown.png) 0 0";
+				ele.setAttribute("name", "inactive")
+				dir=-1
+			}else{
+				ele.style.background = "url(updown_red.png) 0 0";
+				ele.setAttribute("name", "active")
+			}
+		}else{
+			if (currentState === "active"){
+				ele.style.background = "url(updown.png) 0 -17px";
+				ele.setAttribute("name", "inactive")
+				dir=1
+			}else{
+				ele.style.background = "url(updown_red.png) 0 -17px";
+				ele.setAttribute("name", "active")
+			}
+		}
+		var comScore = ele.parentNode.getElementsByClassName("comScore")[0];
+		comScore.innerHTML = parseInt(comScore.innerHTML)+dir;
+		return dir;
 	},
 
 	getTime: function (secs){

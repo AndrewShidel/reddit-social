@@ -254,7 +254,6 @@ var com = {
 				var now = new Date();
 				var time = now.getTime();
 				var expireTime = time + parseInt(data["expires_in"])*1000;
-				alert("Expires in: "+data["expires_in"]);
 				now.setTime(expireTime);
 				com.createCookie(window.tokenData, now);
 

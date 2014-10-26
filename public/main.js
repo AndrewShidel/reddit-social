@@ -70,13 +70,15 @@ var com = {
 		});
 	},
 
-	authentcate: function(toDo){
-		if (document.cookie){
+	authentcate: function(toDo, force){
+		toDo=toDo||"";
+		console.log(toDo)
+		force=force||false;
+		if (document.cookie && document.cookie!="waiting" && !force){
 			window.tokenData = document.cookie;
 			eval(toDo)
 			return;
 		}
-		toDo=toDo||"";
 		var params = document.getElementsByClassName("inputs");
 		var query = "https://ssl.reddit.com/api/v1/authorize?";
 		query+="state="+encodeURIComponent(window.location.href.substring(window.location.href.indexOf("//")+2))+"&";
@@ -93,6 +95,7 @@ var com = {
 	  	document.cookie=window.tempCookie;
 	  	window.cookieInterval=setInterval(function(){
 	  		if(document.cookie!=window.tempCookie){
+	  			console.log(document.cookie);
 	  			window.tokenData=document.cookie;
 	  			clearInterval(window.cookieInterval);
 	  			eval(toDo);
@@ -100,6 +103,7 @@ var com = {
 	  	},500);
 	},
 	onLoad: function(){
+		console.log("On load")
 		var QueryString = function () {
 		  // This function is anonymous, is executed immediately and
 		  // the return value is assigned to QueryString!
@@ -124,22 +128,29 @@ var com = {
 		} ();
 		if (QueryString.code != undefined){
 			var json={
-				state: encodeURIComponent(window.location.href),
-				scope: "identity,edit,read,save,submit,vote",
-				client_id: "aatrT5XMBnbU0Q",
-			   	redirect_uri: "http://shidel.com/redirect.html",
+				//state: encodeURIComponent(window.location.href),
+				//scope: "identity,edit,read,save,submit,vote",
+				//client_id: "aatrT5XMBnbU0Q",
+			   	grant_type: 'authorization_code',
 			   	code: QueryString.code,
-			   	grant_type: 'authorization_code'
+			   	redirect_uri: "http://shidel.com/redirect.html"
 			}
 			var header = {
 				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
 				'Authorization':'Basic '+btoa("aatrT5XMBnbU0Q:uu2YgQZoT6WrOMTrrybtwGwX1VU")
 			};
 			window.theURL=com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header);
-			console.log(window.theURL);
+			console.log("The URL: "+window.theURL);
 			$.get( com.rootURL+"post/?method=v1/access_token&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
-				window.tokenData=JSON.parse(data).access_token;
+				console.log(data)
+				window.tokenData = data.substring(data.indexOf(":")+4,data.indexOf(",")-2)
+				console.log(window.tokenData)
+				if (window.tokenData==undefined){
+					console.log("Token is not defined")
+					return;
+				}
 				document.cookie=window.tokenData;
+				console.log("Authenticated")
 				close();
 				//eval(QueryString.toDo);
 				com.view.scrollIntoView( true );
@@ -197,10 +208,12 @@ var com = {
   		window.clickedOnce=true;
 	},
 	vote:function(ele){
-		com._vote(ele.parentNode.parentNode.getAttribute("name"),ele.getAttribute("class")=="comUp"?1:-1);
+		ele.setAttribute("id", new Date().getTime())
+		com._vote(ele, ele.parentNode.parentNode.getAttribute("name"),ele.getAttribute("class").indexOf("comUp")!=-1?1:-1);
 	},
-	_vote: function(thingID,dir){
+	_vote: function(element,thingID,dir){
 		if (window.tokenData!=undefined){
+			dir = com.toggleVote(element, thingID, dir)
 			var thing=thingID,
 				direction=dir;
 
@@ -220,8 +233,32 @@ var com = {
 				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
 			});
 		}else{
-			com.authentcate("com._vote('"+thingID+"',"+dir+")");
+			com.authentcate("com._vote(document.getElementById('"+element.getAttribute("id")+"'),'"+thingID+"',"+dir+")");
 		}
+	},
+	toggleVote: function(ele, thingID,dir){
+		console.log(dir)
+		var currentState = ele.getAttribute("name")
+		if (dir===1){
+			if (currentState === "active"){
+				ele.style.background = "url(updown.png) 0 0";
+				ele.setAttribute("name", "inactive")
+				dir=-1
+			}else{
+				ele.style.background = "url(updown_red.png) 0 0";
+				ele.setAttribute("name", "active")
+			}
+		}else{
+			if (currentState === "active"){
+				ele.style.background = "url(updown.png) 0 -17px";
+				ele.setAttribute("name", "inactive")
+				dir=1
+			}else{
+				ele.style.background = "url(updown_red.png) 0 -17px";
+				ele.setAttribute("name", "active")
+			}
+		}
+		return dir;
 	},
 
 	start: function(call){
@@ -231,39 +268,52 @@ var com = {
 		//Reddit rejects localhost urls, so this will be temporarily used.
 		location = "http://shidel.com";
 
-		$.get(com.rootURL+"get/?url=" + com.url + "/&origin="+location+"&site="+com.site+"&title="+com.title, function(data){
+		//$.get(com.rootURL+"get/?url=" + com.url + "/&origin="+location+"&site="+com.site+"&title="+com.title, function(data){			
+		$.getJSON("http://"+com.url+".json?jsonp=?", function(obj){
 			com.view.innerHMTL = "";
 
-			if (data=="Creating"){
+			/*if (data=="Creating"){
 				call("nothing");
 				return;
-			}
-			var obj = JSON.parse(data);
+			}*/
+			//var obj = JSON.parse(data);
 			window.mainID=obj[0].data.children[0].data.id;
 			com.header.setAttribute("name",obj[0].data.children[0].data.name)
 			if (obj[1].data.children.length==0){
-				call("nothing");
+				call("nothing");				
 				return;
 			}
 			window.numComments=obj[0].data.children[0].data.num_comments;
-			//com.innerHTML += "<p>" + data + "</p>";
+			//com.innerHTML += "<p>" + data + "</p>";			
 			if (typeof JSON == "undefined"){
-				com.loadScript("./json.js", function(){
+				com.loadScript("./json.js", function(){					
 					var _comments = obj[1].data.children;
 					com.make(com.view, _comments, 0);
 					call("success");
+					com.regesterListeners()
 				})
-			}else{
+			}else{				
 				var _comments = obj[1].data.children;
 				com.make(com.view, _comments, 0);
+				com.regesterListeners()
 				call("success");
 			}
+		});	
+	},
+	regesterListeners: function(){
+		console.log("Regester")
+		jQuery(".commentSimple").click(function(e){
+			e.stopPropagation();
+			var active = document.getElementById("active")
+			if (active!=null)
+				active.setAttribute("id", "");
+			this.setAttribute("id", "active");
 		});
 	},
 
 	make: function(parent, comments,level){
 		if (level==0){
-			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");
+			var msg="THERE "+(window.numComments==1?"IS ":"ARE ")+"<span class='numComments'>"+window.numComments+"</span> COMMENT"+(window.numComments==1?"":"s");			
 			parent.innerHTML="<div class='comHeader' name='"+com.header.getAttribute('name')+"''><h3 class='comHeaderText'>"+msg+". <span><a class='addCommentLink' onclick='com.replyButton(this.parentNode)'>ADD YOURS</a></span></h3><div class='comReply'></div></div>"//+parent.innerHTML;
 		}
 
@@ -282,16 +332,17 @@ var com = {
 	},
 
 	makeComment: function(level, i, data){
-		var _class = com.simple?"commentSimple ":"comment "
+		var _class = com.simple?"commentSimple ":"comment " 
 		if (com.simple) _class += level%2==0?"comColor1":"comColor2";
 	    var id = "parent"+com.viewID+"comLevel"+level+"num"+i
-	    console.log(data);
-	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.name+"'>"
-	        +"<div class='updown'><div onclick='com.vote(this)' class='comUp'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div onclick='com.vote(this)' class='comDown'></div></div>"
+	    if (data.likes!=null)
+	    	console.log(data.likes)
+	    var comment = "<div class='"+_class+"' id="+id+" name='"+data.name+"'>" 
+	        +"<div class='updown'><div onclick='com.vote(this)' class='comUp "+(data.likes?"votedUp":"")+"'></div><span class='comScore'>"+(data.ups - data.downs)+"</span><div onclick='com.vote(this)' class='comDown "+(data.likes===false?"votedDown":"")+"'></div></div>"
 	        +"<div class='comInfo'><a class='shrink' onclick='return com.hideCommnet(this)'>[-]&nbsp&nbsp</span><a class='comAuthor'>"+data.author+"</a><span>&nbsp&nbsp"+com.getTime(data.created_utc)+"</span></div>"
 	        +com.decodeEntities(data.body_html, data.id)
 	        + "</div>"
-
+	       
 	    return comment;
 	},
 
@@ -335,12 +386,13 @@ var com = {
 		});
 	},
 	sourceClicked: function(ele){alert("source")},
-	saveClicked: function(ele){alert("save")},
+	//saveClicked: function(ele){alert("save")},
 	saveClicked: function(id){
 		if (window.tokenData!=undefined){
+			console.log("Id: "+id)
 			var json={
-					category:"",
-					id:id,
+					category:com.site,
+					id:"t1_"+id,
 					'Authorization':'Bearer '+window.tokenData
 			};
 			var header = {
@@ -424,3 +476,6 @@ var com = {
 }
 window.addEventListener("load", com.onLoad, false);
 //window.onload=com.onLoad;
+window["com.start"] = com.start
+window["com.create"] = com.create
+window["com.render"] = com.render

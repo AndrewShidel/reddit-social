@@ -59,10 +59,10 @@ app.get('/post/', function(req, res) {
       form: json
     }, function(error, response, body) {
         if (error){
-            res.status(400).send(error)
+            res.status(400).send(JSON.stringify(body)+"\n\n"+JSON.stringify(response))
             return;
         }
-        res.send(JSON.stringify(body)+"\n\n"+JSON.stringify(response))
+        res.send(JSON.stringify(body))
     });
 });
 

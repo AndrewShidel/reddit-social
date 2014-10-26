@@ -8,7 +8,7 @@
 
 /*html {
     height: 100%;
-	padding: 15px;
+    padding: 15px;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td,iframe {
@@ -64,6 +64,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquot
     top: 0px;
     left: 0px;
     background:url(updown.png) 0 0;
+    background-color: transparent;
     width: 22px;
     height: 17px;
 }
@@ -74,6 +75,13 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquot
     background:url(updown.png) 0 -17px;
     width: 22px;
     height: 17px;
+}
+
+.votedUp{
+    background: url(updown_red.png) 0 0 !important;
+}
+.votedDown{
+    background: url(updown_red.png) 0 -17px !important;
 }
 
 .comScore{
@@ -163,28 +171,33 @@ a.addCommentLink:hover,a.addCommentLink:active{
 
 .md{
     position: relative;
-	top: -22px;
-	right: -35px;
-	width: 88%;
+    top: -22px;
+    right: -35px;
+    width: 88%;
 }
 
 .comments textarea {
     font: normal small verdana,arial,helvetica,sans-serif;
-	width: 500px;
-	height: 200px;
+    width: 500px;
+    height: 200px;
 }
 
 .comment{
-	border: 1px solid #777;
-	margin: 10px;
-	padding: 10px;
+    border: 1px solid #777;
+    margin: 10px;
+    padding: 10px;
     border-radius: 10px;
 }
+
 .commentSimple{
     margin: 10px;
     padding-left: 15px;
     border-radius: 10px;
     border: 1px solid #BBB;
+}
+
+#active{
+    background-color: #F0F3FC !important;
 }
 
 .comColor1{
@@ -196,12 +209,12 @@ a.addCommentLink:hover,a.addCommentLink:active{
 }
 
 /*#comments{
-	display: inline-block;
-	position: absolute;
-	width: 1000px;
-	top: 10px;
-	left: 10px;
-	background-color: #DDD;
+    display: inline-block;
+    position: absolute;
+    width: 1000px;
+    top: 10px;
+    left: 10px;
+    background-color: #DDD;
 }*/
 
 

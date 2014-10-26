@@ -239,6 +239,7 @@ var com = {
 	toggleVote: function(ele, thingID,dir){
 		console.log(dir)
 		var currentState = ele.getAttribute("name")
+		var comScore = ele.parentNode.getElementsByClassName("comScore")[0]
 		if (dir===1){
 			if (currentState === "active"){
 				ele.style.background = "url(updown.png) 0 0";
@@ -258,6 +259,7 @@ var com = {
 				ele.setAttribute("name", "active")
 			}
 		}
+		comScore.innerHTML = parseInt(comScore.innerHTML)+dir;
 		return dir;
 	},
 

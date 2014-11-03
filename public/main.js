@@ -143,7 +143,7 @@ var com = {
 	    	+"<a class='comFooterItem' onClick='com.sourceClicked(this)'>source</a>"
 	    	+"<a class='comFooterItem' onClick='com.saveClicked(\""+id+"\")'>save</a>"
 	    	+"<a class='comFooterItem' onClick='com.reportClicked(this)'>report</a>"
-	    	+"<a class='comFooterItem' onClick='com.giveGoldClicked(this)'>give gold</a>"
+	    	+"<a class='comFooterItem' onClick='com.giveGoldClicked(\""+id+"\")'>give gold</a>"
 	    	+"<a class='comFooterItem' onclick=\" com.replyButton(this); \">reply</a>"
 	    	+"<a class='comFooterItem' onclick=\" com.hideCommnet(this); \">hide child comments</a></div>";
 	    return str;
@@ -431,7 +431,33 @@ var com = {
 		}
 	},
 	reportClicked: function(ele){alert("report")},
-	giveGoldClicked: function(ele){alert("giveGold")},
+	giveGoldClicked: function(id){
+		// /api/v1/gold/gild/
+		if (window.tokenData!=undefined){
+			var json={
+				id:"t1_"+id,
+				'Authorization':'Bearer '+window.tokenData
+			};
+			var header = {
+				'User-Agent': 'Reddit-Social-Comments made by /u/tannerdaman1',
+				'Authorization':'Bearer '+window.tokenData
+			};
+
+			$.get( com.rootURL+"post/?method=v1/gold/gild/t1_"+id+"&oauth=true&json="+JSON.stringify(json)+"&header="+JSON.stringify(header), function( data ) {
+				data = JSON.parse(data);
+				if (data["error"] == 403){
+					document.body.innerHTML+="<div class='comError'>Could not Give Gold</div>";
+				}else{
+					document.body.innerHTML+="<div class='comError'>Gold Given</div>";
+				}
+				$('.comError').fadeIn(400).delay(3000).fadeOut(400);
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				console.log("error: "+JSON.stringify(textStatus));
+			})
+		}else{
+			com.authentcate("com.giveGoldClicked('"+id+"')");
+		}
+	},
 
 
 	hideCommnet: function (e){

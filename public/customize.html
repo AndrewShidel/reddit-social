@@ -159,10 +159,9 @@
         },
         def={
             view: "comments",
-            pageName: "1xfvy7/eli5_what_happens_to_a_persons_creddit_card_debt/",
-            siteName: "explainlikeimfive",
-            simple: true,
-            type: "light"
+            title: "Test post...",
+            siteName: "thissubisafake3",
+            url: "www.reddit.com/r/thissubisafake3/comments/2k7zbf/this_is_another_test/"
         }
         
 
@@ -242,9 +241,9 @@
             console.log(differences);
             var obj={
                 view: "comments",
-                pageName: "1xfvy7/eli5_what_happens_to_a_persons_creddit_card_debt/",
-                siteName: "explainlikeimfive",
-                simple: true,                
+                title: "Test post...",
+                siteName: "thissubisafake3",
+                url: "www.reddit.com/r/thissubisafake3/comments/2k7zbf/this_is_another_test/"         
             }
             for (var key in differences) {
                 obj[key]=differences[key];
@@ -253,10 +252,11 @@
             console.log(JSON.stringify(obj, null, "\t"));
             def=obj;
             writeCode();
-            //document.getElementById("comments").innerHTML = "";
-            com.create(obj);
-            if (get){                
+            if (get){ 
+                com.create(obj)               
                 com.render(function(){window.parent.view.sizeFrame("viewFrame")});
+            }else{
+                com.setStyles(obj);
             }
         }
 

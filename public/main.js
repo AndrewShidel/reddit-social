@@ -10,8 +10,6 @@ var com = {
 		com.rootURL = params.rootURL||"./"
 
 		setTimeout(function(){
-			console.log("Called!!!");
-
 			var msg="LOADING COMMENTS...";
 
 			com.view.innerHTML="<div class='comHeader'><h3 class='comHeaderText'>"+msg+"</h3><img style='height:25px;width:25px;position:relative;top:5px;' src='http://www.paynearme.com/assets/loading-6850ea7c280eb89c1510fa438a8bf9c1.gif'></img></div>";
@@ -45,7 +43,7 @@ var com = {
 		for (var i=0;i<props.length,prop=props[i];i++){
 			key=keys[prop];
 			if (typeof key != 'undefined')
-				$(key[0]).css(key[1], prop);
+				$(key[0]).css(key[1], params[prop]);
 		}
 	},
 	start: function(call){
